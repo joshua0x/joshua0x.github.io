@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on My New Hugo Site</title>
+    <title>Posts on jsh</title>
     <link>https://joshua0x.github.io/josh.github.io/post/</link>
-    <description>Recent content in Posts on My New Hugo Site</description>
+    <description>Recent content in Posts on jsh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 06 Jan 2019 13:40:49 +0800</lastBuildDate>
@@ -23,12 +23,12 @@ python GIL cpython，在调度执行多线程代码时 ，每个线程执行前�
     </item>
     
     <item>
-      <title>Django apache</title>
+      <title>startup</title>
       <link>https://joshua0x.github.io/josh.github.io/post/init/</link>
       <pubDate>Thu, 22 Nov 2018 20:29:08 +0800</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/init/</guid>
-      <description> 部署环境 测试 a b </description>
+      <description></description>
     </item>
     
     <item>
