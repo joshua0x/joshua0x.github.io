@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Posts &middot; jsh</title>
+  <title>Django_orm_migration &middot; jsh</title>
 
   
   <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/print.css" media="print">
@@ -23,7 +23,7 @@
   <link rel="shortcut icon" href="/favicon.png">
 
   
-  <link href="https://joshua0x.github.io/josh.github.io/post/index.xml" rel="alternate" type="application/rss+xml" title="jsh" />
+  <link href="" rel="alternate" type="application/rss+xml" title="jsh" />
 
   
 </head>
@@ -50,17 +50,30 @@
 </aside>
 
     <main class="content container">
-    <ul class="posts">
-<li>
-    <span><a href="https://joshua0x.github.io/josh.github.io/post/django_orm_migration/">Django_orm_migration</a> <time class="pull-right post-list" datetime="2019-01-06T14:26:53&#43;0800">Sun, Jan 6, 2019</time></span>
-  </li><li>
-    <span><a href="https://joshua0x.github.io/josh.github.io/post/django_wsgi/">Django_wsgi</a> <time class="pull-right post-list" datetime="2019-01-06T13:40:49&#43;0800">Sun, Jan 6, 2019</time></span>
-  </li><li>
-    <span><a href="https://joshua0x.github.io/josh.github.io/post/init/">startup</a> <time class="pull-right post-list" datetime="2018-11-22T20:29:08&#43;0800">Thu, Nov 22, 2018</time></span>
-  </li><li>
-    <span><a href="https://joshua0x.github.io/josh.github.io/post/django_thread_safe/"></a> <time class="pull-right post-list" datetime="0001-01-01T00:00:00Z">Mon, Jan 1, 0001</time></span>
-  </li>
-</ul>
+    <div class="post">
+  <h1>Django_orm_migration</h1>
+  <time datetime=2019-01-06T14:26:53&#43;0800 class="post-date">Sun, Jan 6, 2019</time>
+  
+
+<h2 id="django-orm-migrate-流程">django orm migrate   流程</h2>
+
+<h3 id="执行-python-manage-py-makemigrations-app-name">执行  python  manage.py  makemigrations  app_name</h3>
+
+<p>1.依据当前app 的migrations 文件的 依赖关系  构建 修改model.py  前的数据表结构
+2.扫描当前model.py  生成表结构   与 步骤1 中 做  diff 操作  生成migrations 文件</p>
+
+<h3 id="执行-python-manage-py-migrate">执行 python   manage.py migrate</h3>
+
+<ol>
+<li>检查表 django_migrations 中   各个migrations 文件是否执行   ， 执行未执行的文件</li>
+</ol>
+
+<p>##ref
+<a href="https://reinout.vanrees.org/weblog/2014/11/14/2migrations.html">https://reinout.vanrees.org/weblog/2014/11/14/2migrations.html</a></p>
+
+</div>
+
+
     </main>
 
     

@@ -53,6 +53,14 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://joshua0x.github.io/josh.github.io/post/django_orm_migration/">Django_orm_migration</a>
+  </h1>
+  <time datetime="2019-01-06T14:26:53&#43;0800" class="post-date">Sun, Jan 6, 2019</time>
+  django orm migrate 流程 执行 python manage.py makemigrations app_name 1.依据当前app 的migrations 文件的 依赖关系 构建 修改model.py 前的数据表结构 2.扫描当前model.py 生成表结构 与 步骤1 中 做 diff 操作 生成migrations 文件
+执行 python manage.py migrate  检查表 django_migrations 中 各个migrations 文件是否执行 ， 执行未执行的文件  ##ref https://reinout.vanrees.org/weblog/2014/11/14/2migrations.html
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://joshua0x.github.io/josh.github.io/post/django_wsgi/">Django_wsgi</a>
   </h1>
   <time datetime="2019-01-06T13:40:49&#43;0800" class="post-date">Sun, Jan 6, 2019</time>
