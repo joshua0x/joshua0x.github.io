@@ -1,23 +1,43 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Hugo Tikva Theme</title>
-    <link>https://joshua1x.github.io/josh.github.io/</link>
-    <description>Recent content on Hugo Tikva Theme</description>
+    <title>My New Hugo Site</title>
+    <link>https://joshua0x.github.io/josh.github.io/</link>
+    <description>Recent content on My New Hugo Site</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en_US</language>
-    <lastBuildDate>Thu, 22 Nov 2018 20:29:08 +0800</lastBuildDate>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 06 Jan 2019 13:40:49 +0800</lastBuildDate>
     
-	<atom:link href="https://joshua1x.github.io/josh.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://joshua0x.github.io/josh.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Init</title>
-      <link>https://joshua1x.github.io/josh.github.io/post/init/</link>
+      <title>Django_wsgi</title>
+      <link>https://joshua0x.github.io/josh.github.io/post/django_wsgi/</link>
+      <pubDate>Sun, 06 Jan 2019 13:40:49 +0800</pubDate>
+      
+      <guid>https://joshua0x.github.io/josh.github.io/post/django_wsgi/</guid>
+      <description>DJANGO 线程安全 在项目中 基于 APACHE DJANGO 搭建WEB 服务. DJANGO APACHE 间基于WSGI协议通信。mod_wsgi 模块以daemon-mode 运行 ，APACHE 进程与 mod_wsgi 进程 通过UNIX SOCKET 通信。在daemon-mode 下 ，可以配置进程 与线程数目，对于每个进程会启动一个python interpreter ,其会生成1个wsgiHandler
+apache conf 如下： &amp;gt;WSGIScriptAlias / &amp;ldquo;YOUR_PATH/wsgi.py&amp;rdquo; &amp;gt;WSGIDaemonProcess 10.67.20.1 processes=2 threads=15 &amp;gt;WSGIProcessGroup 10.67.20.1 &amp;gt;&amp;gt;Order Deny,Allow &amp;gt;Allow from all &amp;gt;
+python GIL cpython，在调度执行多线程代码时 ，每个线程执行前需要获取锁，但是GIL的存在并不能使得python 多线程在操作共享变量时达到线程安全的效果。由于python下的单行语句编译得到字节码后可能是多条指令 ，指令间可能发生线程调度。 考虑如下代码： import threading import time zero = 0 def change_zero(): global zero for i in range(3000000): zero += 1 #23 zero -= 1 #24</description>
+    </item>
+    
+    <item>
+      <title>Django apache</title>
+      <link>https://joshua0x.github.io/josh.github.io/post/init/</link>
       <pubDate>Thu, 22 Nov 2018 20:29:08 +0800</pubDate>
       
-      <guid>https://joshua1x.github.io/josh.github.io/post/init/</guid>
-      <description>bootstrap halo</description>
+      <guid>https://joshua0x.github.io/josh.github.io/post/init/</guid>
+      <description> 部署环境 测试 a b </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://joshua0x.github.io/josh.github.io/post/django_thread_safe/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://joshua0x.github.io/josh.github.io/post/django_thread_safe/</guid>
+      <description>#部署环境 #测试 ##a ##b</description>
     </item>
     
   </channel>
