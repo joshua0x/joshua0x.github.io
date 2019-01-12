@@ -3,6 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://joshua0x.github.io/josh.github.io/post/py_unicode/</loc>
+    <lastmod>2019-01-12T16:31:47+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://joshua0x.github.io/josh.github.io/post/auth_middle/</loc>
+    <lastmod>2019-01-12T16:31:47+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://joshua0x.github.io/josh.github.io/post/django_orm_migration/</loc>
     <lastmod>2019-01-06T14:26:53+08:00</lastmod>
   </url>
@@ -28,7 +38,7 @@
   
   <url>
     <loc>https://joshua0x.github.io/josh.github.io/post/</loc>
-    <lastmod>2019-01-06T14:26:53+08:00</lastmod>
+    <lastmod>2019-01-12T16:31:47+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -39,7 +49,7 @@
   
   <url>
     <loc>https://joshua0x.github.io/josh.github.io/</loc>
-    <lastmod>2019-01-06T14:26:53+08:00</lastmod>
+    <lastmod>2019-01-12T16:31:47+08:00</lastmod>
     <priority>0</priority>
   </url>
   
