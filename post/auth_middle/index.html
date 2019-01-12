@@ -53,31 +53,40 @@
     <div class="post">
   <h1>django 持久回话</h1>
   <time datetime=2019-01-12T16:31:47&#43;0800 class="post-date">Sat, Jan 12, 2019</time>
-  <p>##SessionMiddleware  AuthenticationMiddleware 完成持久会话
-按照如下流程完成认证与持久会话,其中authenticate、login 是contrib/auth 中的函數
-###1.authenticate
-输入 认证信息
+  
+
+<h2 id="sessionmiddleware-authenticationmiddleware-完成持久会话">SessionMiddleware  AuthenticationMiddleware 完成持久会话</h2>
+
+<p>按照如下流程完成认证与持久会话,其中authenticate、login 是contrib/auth 中的函數</p>
+
+<h3 id="1-authenticate">1.authenticate</h3>
+
+<p>输入 认证信息
 输出  user 对象</p>
 
-<p>###2.login</p>
+<h3 id="2-login">2.login</h3>
 
 <p>2.1   将user id 写入 SESSION
 2.2  在执行sessionMiddleWare  process_response 函数时 检测到session 变更  ，执行持久化</p>
 
-<p>###3.authmiddleware
-完成認證后下次WEB請求到達時 , authmiddleware 依賴于sessionMiddleware,
+<h3 id="3-authmiddleware">3.authmiddleware</h3>
+
+<p>完成認證后下次WEB請求到達時 , authmiddleware 依賴于sessionMiddleware,
 在settings.py 中配置時出現在後面。</p>
 
-<p>####3.1 sessionMiddleware
-反序列化出sessionData</p>
+<h4 id="3-1-sessionmiddleware">3.1 sessionMiddleware</h4>
 
-<p>####3.2 authMiddleWare
-從sessionData取出userid  生成user對象</p>
+<p>反序列化出sessionData</p>
 
-<p>###4. 登出
-clear session data</p>
+<h4 id="3-2-authmiddleware">3.2 authMiddleWare</h4>
 
-<p>###版本django 1.8</p>
+<p>從sessionData取出userid  生成user對象</p>
+
+<h3 id="4-登出">4. 登出</h3>
+
+<p>clear session data</p>
+
+<h3 id="版本django-1-8">版本django 1.8</h3>
 
 </div>
 

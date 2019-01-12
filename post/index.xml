@@ -17,14 +17,14 @@
       <pubDate>Sat, 12 Jan 2019 16:31:47 +0800</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/auth_middle/</guid>
-      <description>##SessionMiddleware AuthenticationMiddleware 完成持久会话 按照如下流程完成认证与持久会话,其中authenticate、login 是contrib/auth 中的函數 ###1.authenticate 输入 认证信息 输出 user 对象
-###2.login
-2.1 将user id 写入 SESSION 2.2 在执行sessionMiddleWare process_response 函数时 检测到session 变更 ，执行持久化
-###3.authmiddleware 完成認證后下次WEB請求到達時 , authmiddleware 依賴于sessionMiddleware, 在settings.py 中配置時出現在後面。
-####3.1 sessionMiddleware 反序列化出sessionData
-####3.2 authMiddleWare 從sessionData取出userid 生成user對象
-###4. 登出 clear session data
-###版本django 1.8</description>
+      <description> SessionMiddleware AuthenticationMiddleware 完成持久会话 按照如下流程完成认证与持久会话,其中authenticate、login 是contrib/auth 中的函數
+1.authenticate 输入 认证信息 输出 user 对象
+2.login 2.1 将user id 写入 SESSION 2.2 在执行sessionMiddleWare process_response 函数时 检测到session 变更 ，执行持久化
+3.authmiddleware 完成認證后下次WEB請求到達時 , authmiddleware 依賴于sessionMiddleware, 在settings.py 中配置時出現在後面。
+3.1 sessionMiddleware 反序列化出sessionData
+3.2 authMiddleWare 從sessionData取出userid 生成user對象
+4. 登出 clear session data
+版本django 1.8 </description>
     </item>
     
     <item>
