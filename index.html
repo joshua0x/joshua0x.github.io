@@ -56,9 +56,10 @@
     <a href="https://joshua0x.github.io/josh.github.io/post/py_unicode/">Py_unicode</a>
   </h1>
   <time datetime="2019-01-12T16:31:47&#43;0800" class="post-date">Sat, Jan 12, 2019</time>
-  ##Unicode UTF8 Unicode 是字符集 UTF8 是变长编码规则
-##py2 python2 中，string、UNICODE 是内置类型. string 为 按照特定编码规则编码后的字节串，UNICODE 为按照UCS-2或者UCS-4编码的UNICODE 码点(code point) STRING 在2种编码规则好间转换需要经过UNICODE 中转 ###输出至shell 在Linux下 可以直接print unicode, string 在输出 unicode对象， 应该会获取sys.stdout 的编码规则属性进行编码然后输出
-##py3 只有string 类型 ，底层存储类似于PYTHON2 中的UNICODE TYPE ,所以无decode方法,通过encode方法转换编码
+  Unicode UTF8 Unicode 是字符集 UTF8 是变长编码规则
+py2 python2 中，string、UNICODE 是内置类型. string 为 按照特定编码规则编码后的字节串，UNICODE 为按照UCS-2或者UCS-4编码的UNICODE 码点(code point) STRING 在2种编码规则好间转换需要经过UNICODE 中转
+输出至shell 在Linux下 可以直接print unicode, string 在输出 unicode对象， 应该会获取sys.stdout 的编码规则属性进行编码然后输出
+py3 只有string 类型 ，底层存储类似于PYTHON2 中的UNICODE TYPE ,所以无decode方法,通过encode方法转换编码
 ref https://downloads.egenix.com/python/Unicode-EPC2002-Talk.pdf https://blog.csdn.net/u014591781/article/details/78415044
   
 </article><article class="post">
@@ -89,7 +90,7 @@ ref https://downloads.egenix.com/python/Unicode-EPC2002-Talk.pdf https://blog.cs
   </h1>
   <time datetime="2019-01-06T13:40:49&#43;0800" class="post-date">Sun, Jan 6, 2019</time>
   DJANGO 线程安全 在项目中 基于 APACHE DJANGO 搭建WEB 服务. DJANGO APACHE 间基于WSGI协议通信。mod_wsgi 模块以daemon-mode 运行 ，APACHE 进程与 mod_wsgi 进程 通过UNIX SOCKET 通信。在daemon-mode 下 ，可以配置进程 与线程数目，对于每个进程会启动一个python interpreter ,其会生成1个wsgiHandler
-apache conf 如下： &gt;WSGIScriptAlias / &ldquo;YOUR_PATH/wsgi.py&rdquo; &gt;WSGIDaemonProcess 10.67.20.1 processes=2 threads=15 &gt;WSGIProcessGroup 10.67.20.1 &gt;&gt;Order Deny,Allow &gt;Allow from all &gt;
+apache conf 如下： WSGIScriptAlias / &ldquo;YOUR_PATH/wsgi.py&rdquo; WSGIDaemonProcess 10.67.20.1 processes=2 threads=15 WSGIProcessGroup 10.67.20.1 Order Deny,Allow Allow from all 
 python GIL cpython，在调度执行多线程代码时 ，每个线程执行前需要获取锁，但是GIL的存在并不能使得python 多线程在操作共享变量时达到线程安全的效果。由于python下的单行语句编译得到字节码后可能是多条指令 ，指令间可能发生线程调度。 考虑如下代码： import threading import time zero = 0 def change_zero(): global zero for i in range(3000000): zero += 1 #23 zero -= 1 #24
   
   <div class="read-more-link">

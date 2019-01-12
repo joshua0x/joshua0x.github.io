@@ -60,13 +60,13 @@
 <p>在项目中 基于  APACHE  DJANGO 搭建WEB 服务. DJANGO  APACHE 间基于WSGI协议通信。mod_wsgi 模块以daemon-mode 运行 ，APACHE 进程与 mod_wsgi 进程 通过UNIX SOCKET  通信。在daemon-mode 下 ，可以配置进程 与线程数目，对于每个进程会启动一个python interpreter ,其会生成1个wsgiHandler</p>
 
 <p>apache conf 如下：
-&gt;WSGIScriptAlias / &ldquo;YOUR_PATH/wsgi.py&rdquo;
-&gt;WSGIDaemonProcess  10.67.20.1   processes=2 threads=15
-&gt;WSGIProcessGroup  10.67.20.1
-&gt;<Directory "YOUR_WEB_PATH">
-  &gt;Order Deny,Allow
-  &gt;Allow from all
-&gt;</Directory></p>
+WSGIScriptAlias / &ldquo;YOUR_PATH/wsgi.py&rdquo;
+WSGIDaemonProcess  10.67.20.1   processes=2 threads=15
+WSGIProcessGroup  10.67.20.1
+<Directory "YOUR_WEB_PATH">
+ Order Deny,Allow
+ Allow from all
+</Directory></p>
 
 <h2 id="python-gil">python  GIL</h2>
 
