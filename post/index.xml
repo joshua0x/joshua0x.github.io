@@ -12,19 +12,6 @@
     
     
     <item>
-      <title>Py_unicode</title>
-      <link>https://joshua0x.github.io/josh.github.io/post/py_unicode/</link>
-      <pubDate>Sat, 12 Jan 2019 16:31:47 +0800</pubDate>
-      
-      <guid>https://joshua0x.github.io/josh.github.io/post/py_unicode/</guid>
-      <description>Unicode UTF8 Unicode 是字符集 UTF8 是变长编码规则
-py2 python2 中，string、UNICODE 是内置类型. string 为 按照特定编码规则编码后的字节串，UNICODE 为按照UCS-2或者UCS-4编码的UNICODE 码点(code point) STRING 在2种编码规则好间转换需要经过UNICODE 中转
-输出至shell 在Linux下 可以直接print unicode, string 在输出 unicode对象， 应该会获取sys.stdout 的编码规则属性进行编码然后输出
-py3 只有string 类型 ，底层存储类似于PYTHON2 中的UNICODE TYPE ,所以无decode方法,通过encode方法转换编码
-ref https://downloads.egenix.com/python/Unicode-EPC2002-Talk.pdf https://blog.csdn.net/u014591781/article/details/78415044</description>
-    </item>
-    
-    <item>
       <title>django 持久回话</title>
       <link>https://joshua0x.github.io/josh.github.io/post/auth_middle/</link>
       <pubDate>Sat, 12 Jan 2019 16:31:47 +0800</pubDate>
@@ -38,6 +25,19 @@ ref https://downloads.egenix.com/python/Unicode-EPC2002-Talk.pdf https://blog.cs
 ####3.2 authMiddleWare 從sessionData取出userid 生成user對象
 ###4. 登出 clear session data
 ###版本django 1.8</description>
+    </item>
+    
+    <item>
+      <title>py_unicode</title>
+      <link>https://joshua0x.github.io/josh.github.io/post/py_unicode/</link>
+      <pubDate>Sat, 12 Jan 2019 16:31:47 +0800</pubDate>
+      
+      <guid>https://joshua0x.github.io/josh.github.io/post/py_unicode/</guid>
+      <description>Unicode UTF8 Unicode 是字符集 UTF8 是变长编码规则
+py2 python2 中，string、UNICODE 是内置类型. string 为 按照特定编码规则编码后的字节串，UNICODE 为按照UCS-2或者UCS-4编码的UNICODE 码点(code point) STRING 在2种编码规则好间转换需要经过UNICODE 中转
+输出至shell 在Linux下 可以直接print unicode, string 在输出 unicode对象， 应该会获取sys.stdout 的编码规则属性进行编码然后输出
+py3 只有string 类型 ，底层存储类似于PYTHON2 中的UNICODE TYPE ,所以无decode方法,通过encode方法转换编码
+ref https://downloads.egenix.com/python/Unicode-EPC2002-Talk.pdf https://blog.csdn.net/u014591781/article/details/78415044</description>
     </item>
     
     <item>
