@@ -92,10 +92,12 @@ print(zero)
 
 <p>由于 #23,24 包含多条字节码    以上程序不能保证最好=后输出  0</p>
 
-<h1 id="环境与测试">环境与测试</h1>
+<pre><code># 环境与测试
+DJANGO  代码 一般包含 view  model 层，由于单个进程  包含多个线程  ，对于view  model  层的脚本中module level 的对象都是共享的，而且这类对象的生命期与进程一致，这样可能在多次HTTP请求间产生副作用。
+通过线程安全的logging 模块记录结果，可以验证。
 
-<p>DJANGO  代码 一般包含 view  model 层，由于单个进程  包含多个线程  ，对于view  model  层的脚本中module level 的对象都是共享的，而且这类对象的生命期与进程一致，这样可能在多次HTTP请求间产生副作用。
-通过线程安全的logging 模块记录结果，可以验证。</p>
+## refs 
+</code></pre>
 
 </div>
 

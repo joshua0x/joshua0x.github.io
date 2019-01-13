@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.51" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>python logging safety &middot; jsh</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="jsh" />
+
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://joshua0x.github.io/josh.github.io/"><h1>jsh</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://joshua0x.github.io/josh.github.io/">Home</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>python logging safety</h1>
+  <time datetime=2019-01-06T13:40:49&#43;0800 class="post-date">Sun, Jan 6, 2019</time>
+  
+
+<h2 id="logging-thread-safety">logging  thread safety</h2>
+
+<p>按照官方doc , 在多线程环境下访问模块shared data object  ,以及handler写入文件系统时都通过加锁保证原子写入</p>
+
+<p>在进程内多个相同参数调用  logging.getLogger  会返回同1个对象</p>
+
+<h2 id="多进程日志">多进程日志</h2>
+
+<p>通过logging  filehandler , 多进程环境下写入相同的日志文件 是安全的吗？
+通过如下代码进行测试，在t_str 超过 8k后  统计&rsquo;test&rsquo; 文件每行长度 发现不一致 ,即写入发送了截断冲突
+查阅 logging 源码  发现  FileHandler 是以&rsquo;a&rsquo; 模式打开文件,按照《The Linux Programming inTerface》：
+O_APPEND  模式 可以保证 每次写入前SEEK_END ，而且为原子操作 (每次系统调用由kernel保证为原子操作)；存在例外为 PIPE,FIFO 在操作时，有PIPE_BUF 的限制,
+[ref1] 中解释为因为PIPE_BUF 限制而出现此问题,但是测试代码写的是REGULAR  FILE ，应该不是此问题.<br />
+[ref3] 中给出 调用OS模块OPEN,WRITE 方法的MPFileLogHandler ，经过测试是进程安全的</p>
+
+<p>是否因为 PYTHON  OPEN 函数 与    OS.OPEN 实现不同呢?  tobe continued</p>
+
+<pre><code># coding :utf-8
+from multiprocessing import  Pool
+import logging
+import datetime  
+import os 
+class MPFileLogHandler(logging.Handler):
+    def __init__(self, file_path):
+    self._fd = os.open(file_path, os.O_WRONLY | os.O_CREAT | os.O_APPEND)
+    logging.Handler.__init__(self)
+
+    def emit(self, record):
+    msg = &quot;{}\n&quot;.format(self.format(record))
+    os.write(self._fd, msg.encode('utf-8'))
+def process_log(p_off):
+    #logger_handler = MPFileLogHandler('test')
+    logger_handler = logging.FileHandler('test')
+    logger = logging.getLogger('test')
+    logger.addHandler(logger_handler)
+    logger.setLevel(logging.DEBUG)
+    for x in range(0, 200):
+    d = datetime.datetime.now()
+    t_str = 'test' *10 # 
+    logger.info('{}:{}:p_off({}):pid({})'.format(t_str, d.strftime('%Y-%m-%d %H:%M:%S'), p_off, os.getpid()))
+
+#process_log(1)
+if __name__ == '__main__':
+    p = Pool(4)
+    for i in range(32):
+    p.apply_async(process_log, args=(i,))
+    print  'waiting.....'
+    p.close()
+    p.join()
+</code></pre>
+
+<h2 id="refs">refs</h2>
+
+<p>[0]<a href="https://stackoverflow.com/questions/12111127/how-standard-specify-atomic-write-to-regular-filenot-pipe-or-fifo">https://stackoverflow.com/questions/12111127/how-standard-specify-atomic-write-to-regular-filenot-pipe-or-fifo</a>
+[1]<a href="https://manjusaka.itscoder.com/2018/02/23/logging-process-safe/">https://manjusaka.itscoder.com/2018/02/23/logging-process-safe/</a>
+[3]<a href="https://www.u3v3.com/ar/1330">https://www.u3v3.com/ar/1330</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>
