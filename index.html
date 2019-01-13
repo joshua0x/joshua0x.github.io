@@ -104,7 +104,11 @@ python GIL cpython，在调度执行多线程代码时 ，每个线程执行前�
   <time datetime="2019-01-06T13:40:49&#43;0800" class="post-date">Sun, Jan 6, 2019</time>
   logging thread safety 按照官方doc , 在多线程环境下访问模块shared data object ,以及handler写入文件系统时都通过加锁保证原子写入
 在进程内多个相同参数调用 logging.getLogger 会返回同1个对象
-多进程日志 通过logging filehandler , 多进程环境下写入相同的日志文件 是安全的吗？ 通过如下代码进行测试，在t_str 超过 8k后 统计&rsquo;test&rsquo; 文件每行长度 发现不一致 ,即写入发送了截断冲突 查阅 logging 源码 发现 FileHandler 是以&rsquo;a&rsquo; 模式打开文件,按照《The Linux Programming inTerface》： O_APPEND 模式 可以保证 每次写入前SEEK_END ，而且为原子操作 (每次系统调用由kernel保证为原子操作)；存在例外为 PIPE,FIFO 在操作时，有PIPE_BUF 的限制, [ref1] 中解释为因为PIPE_BUF 限制而出现此问题,但是测试代码写的是REGULAR FILE ，应该不是此问题.
+多进程日志 通过logging filehandler , 多进程环境下写入相同的日志文件 是安全的吗？
+通过如下代码进行测试，在t_str 超过 8k后 统计&rsquo;test&rsquo; 文件每行长度 发现不一致 ,即写入发送了截断冲突
+查阅 logging 源码 发现 FileHandler 是以&rsquo;a&rsquo; 模式打开文件,按照《The Linux Programming inTerface》：
+O_APPEND 模式 可以保证 每次写入前SEEK_END ，而且为原子操作 (每次系统调用由kernel保证为原子操作)；存在例外为 PIPE,FIFO 在操作时，有PIPE_BUF 的限制,
+[ref1] 中解释为因为PIPE_BUF 限制而出现此问题,但是测试代码写的是REGULAR FILE ，应该不是此问题.
 [ref3] 中给出 调用OS模块OPEN,WRITE 方法的MPFileLogHandler ，经过测试是进程安全的
 是否因为 PYTHON OPEN 函数 与 OS.OPEN 实现不同呢? tobe continued
 # coding :utf-8 from multiprocessing import Pool import logging import datetime import os class MPFileLogHandler(logging.
