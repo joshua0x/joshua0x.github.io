@@ -70,7 +70,8 @@ python GIL cpython，在调度执行多线程代码时 ，每个线程执行前�
       <description>线程安全 测试 按照官方doc , 在多线程环境下访问模块shared data object ,以及handler写入文件系统时都通过加锁保证原子写入
 在进程内多个相同参数调用 logging.getLogger 会返回同1个对象
 可以用 如下 代码测试 ， 注意由于imported modules 是进程级别的, 下面的多线程环境重复IMPORT 不会导致重复IMPORT
-import threading import time def worker(): import logging as lg k = lg.getLogger(&#39;a&#39;) print id(lg),id(k) print &#39;\n&#39; t = threading.Thread(target = worker) t.start() t = threading.Thread(target = worker) t.start()  源码分析 为保证线程安全 , 源码中 主要通过 threading.Rlock 保护 2类 对象: a. module level object
+import threading import time def worker(): import logging as lg k = lg.getLogger(&#39;a&#39;) print id(lg),id(k) print &#39;\n&#39; t = threading.Thread(target = worker) t.start() t = threading.Thread(target = worker) t.start()  源码分析 为保证线程安全 , 源码中 主要通过 threading.Rlock 保护 2类 对象:
+a. module level object
 b. 文件IO
 多进程日志 通过logging filehandler , 多进程环境下写入相同的日志文件 是安全的吗？</description>
     </item>

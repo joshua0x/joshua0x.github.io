@@ -80,8 +80,9 @@ t.start()
 
 <h3 id="源码分析">源码分析</h3>
 
-<p>为保证线程安全  , 源码中  主要通过  threading.Rlock 保护  2类 对象:
-a.  module level   object</p>
+<p>为保证线程安全  , 源码中  主要通过  threading.Rlock 保护  2类 对象:</p>
+
+<p>a.  module level   object</p>
 
 <p>b. 文件IO</p>
 
@@ -136,29 +137,32 @@ if __name__ == '__main__':
 <h2 id="timedrotatingfilehandler">TimedRotatingFileHandler</h2>
 
 <p>TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境下 对同1个日志处理时  安全吗？
-简化的代码如下：
-    def doRollover(self):
-        if self.stream:
-        self.stream.close()
-        self.stream = None
-        # get the time that this sequence started at and make it a TimeTuple
-        dfn = self.baseFilename + &ldquo;.&rdquo; + time.strftime(self.suffix, timeTuple)
-        if os.path.exists(dfn):
-        os.remove(dfn)
-        if os.path.exists(self.baseFilename):
-        os.rename(self.baseFilename, dfn)
-        self.rolloverAt = newRolloverAt</p>
+简化的代码如下：</p>
+
+<pre><code>def doRollover(self):
+    if self.stream:
+    self.stream.close()
+    self.stream = None
+    # get the time that this sequence started at and make it a TimeTuple
+    dfn = self.baseFilename + &quot;.&quot; + time.strftime(self.suffix, timeTuple)
+    if os.path.exists(dfn):
+    os.remove(dfn)
+    if os.path.exists(self.baseFilename):
+    os.rename(self.baseFilename, dfn)
+    self.rolloverAt = newRolloverAt
+</code></pre>
 
 <p>显然在多进程都调用  时  存在 其他 删除 已经 完成分割进程 的 日志文件的可能</p>
 
 <h2 id="timedrotatingfilehandler-mp">TimedRotatingFileHandler_MP</h2>
 
-<p>通过文件锁  保证 多进程安全写入
-        def emit(self, record):
-        &ldquo;&rdquo;&rdquo;
-        Emit a record.</p>
+<p>通过文件锁  保证 多进程安全写入</p>
 
-<pre><code>    Output the record to the file, catering for rollover as described
+<pre><code>    def emit(self, record):
+    &quot;&quot;&quot;
+    Emit a record.
+
+    Output the record to the file, catering for rollover as described
     in doRollover().
 
     For multiprocess, we use file lock. Any better method ?
