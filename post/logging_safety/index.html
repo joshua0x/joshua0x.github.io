@@ -55,11 +55,35 @@
   <time datetime=2019-01-06T13:40:49&#43;0800 class="post-date">Sun, Jan 6, 2019</time>
   
 
-<h2 id="logging-thread-safety">logging  thread safety</h2>
+<h2 id="线程安全">线程安全</h2>
+
+<h3 id="测试">测试</h3>
 
 <p>按照官方doc , 在多线程环境下访问模块shared data object  ,以及handler写入文件系统时都通过加锁保证原子写入</p>
 
 <p>在进程内多个相同参数调用  logging.getLogger  会返回同1个对象</p>
+
+<p>可以用 如下 代码测试  ， 注意由于imported modules 是进程级别的, 下面的多线程环境重复IMPORT  不会导致重复IMPORT</p>
+
+<pre><code>import  threading
+import  time
+def  worker():
+    import logging as  lg
+    k = lg.getLogger('a')
+    print   id(lg),id(k)
+    print  '\n'
+t =  threading.Thread(target = worker)
+t.start()
+t =  threading.Thread(target = worker)
+t.start()
+</code></pre>
+
+<h3 id="源码分析">源码分析</h3>
+
+<p>为保证线程安全  , 源码中  主要通过  threading.Rlock 保护  2类 对象:
+a.  module level   object</p>
+
+<p>b. 文件IO</p>
 
 <h2 id="多进程日志">多进程日志</h2>
 
@@ -109,11 +133,94 @@ if __name__ == '__main__':
     p.join()
 </code></pre>
 
+<h2 id="timedrotatingfilehandler">TimedRotatingFileHandler</h2>
+
+<p>TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境下 对同1个日志处理时  安全吗？
+简化的代码如下：
+    def doRollover(self):
+        if self.stream:
+        self.stream.close()
+        self.stream = None
+        # get the time that this sequence started at and make it a TimeTuple
+        dfn = self.baseFilename + &ldquo;.&rdquo; + time.strftime(self.suffix, timeTuple)
+        if os.path.exists(dfn):
+        os.remove(dfn)
+        if os.path.exists(self.baseFilename):
+        os.rename(self.baseFilename, dfn)
+        self.rolloverAt = newRolloverAt</p>
+
+<p>显然在多进程都调用  时  存在 其他 删除 已经 完成分割进程 的 日志文件的可能</p>
+
+<h2 id="timedrotatingfilehandler-mp">TimedRotatingFileHandler_MP</h2>
+
+<p>通过文件锁  保证 多进程安全写入
+        def emit(self, record):
+        &ldquo;&rdquo;&rdquo;
+        Emit a record.</p>
+
+<pre><code>    Output the record to the file, catering for rollover as described
+    in doRollover().
+
+    For multiprocess, we use file lock. Any better method ?
+    &quot;&quot;&quot;
+    try:
+        if self.shouldRollover(record):
+        self.doRollover()
+        FileLock = self._lock_dir + '/' + os.path.basename(self.baseFilename) + '.' + record.levelname
+        f = open(FileLock, &quot;w+&quot;)
+        fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+        FileHandler_MP.emit(self, record)
+        fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+        f.close()
+    except (KeyboardInterrupt, SystemExit):
+        raise
+    except:
+        self.handleError(record)
+</code></pre>
+
+<p>但是在文件分割阶段  依旧存在  TimedRotatingFileHandler 中所述问题</p>
+
+<h2 id="concurrentloghandler">ConcurrentLogHandler</h2>
+
+<p>ConcurrentLogHandler  重写了基类 Handler  acquire 方法</p>
+
+<p>处理doRollover 前获取了当前日志文件的 排他锁  , 可以保证安全地分割文件</p>
+
+<pre><code>    def acquire(self):
+    &quot;&quot;&quot; Acquire thread and file locks.  Re-opening log for 'degraded' mode.
+    &quot;&quot;&quot;
+    # handle thread lock
+    Handler.acquire(self)
+    # Issue a file lock.  (This is inefficient for multiple active threads
+    # within a single process. But if you're worried about high-performance,
+    # you probably aren't using this log handler.)
+    if self.stream_lock:
+        # If stream_lock=None, then assume close() was called or something
+        # else weird and ignore all file-level locks.
+        if self.stream_lock.closed:
+        # Daemonization can close all open file descriptors, see
+        # https://bugzilla.redhat.com/show_bug.cgi?id=952929
+        # Try opening the lock file again.  Should we warn() here?!?
+        try:
+            self._open_lockfile()
+        except Exception:
+            self.handleError(NullLogRecord())
+            # Don't try to open the stream lock again
+            self.stream_lock = None
+            return
+        lock(self.stream_lock, LOCK_EX)
+    # Stream will be opened as part by FileHandler.emit()
+</code></pre>
+
+<h2 id="logging-implement-details">logging   implement  details</h2>
+
 <h2 id="refs">refs</h2>
 
-<p>[0]<a href="https://stackoverflow.com/questions/12111127/how-standard-specify-atomic-write-to-regular-filenot-pipe-or-fifo">https://stackoverflow.com/questions/12111127/how-standard-specify-atomic-write-to-regular-filenot-pipe-or-fifo</a>
-[1]<a href="https://manjusaka.itscoder.com/2018/02/23/logging-process-safe/">https://manjusaka.itscoder.com/2018/02/23/logging-process-safe/</a>
-[3]<a href="https://www.u3v3.com/ar/1330">https://www.u3v3.com/ar/1330</a></p>
+<p>[0]<a href="https://stackoverflow.com/questions/12111127/how-standard-specify-atomic-write-to-regular-filenot-pipe-or-fifo">https://stackoverflow.com/questions/12111127/how-standard-specify-atomic-write-to-regular-filenot-pipe-or-fifo</a></p>
+
+<p>[1]<a href="https://manjusaka.itscoder.com/2018/02/23/logging-process-safe/">https://manjusaka.itscoder.com/2018/02/23/logging-process-safe/</a></p>
+
+<p>[3]<a href="https://www.u3v3.com/ar/1330">https://www.u3v3.com/ar/1330</a></p>
 
 </div>
 

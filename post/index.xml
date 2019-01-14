@@ -67,16 +67,12 @@ python GIL cpython，在调度执行多线程代码时 ，每个线程执行前�
       <pubDate>Sun, 06 Jan 2019 13:40:49 +0800</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/logging_safety/</guid>
-      <description>logging thread safety 按照官方doc , 在多线程环境下访问模块shared data object ,以及handler写入文件系统时都通过加锁保证原子写入
+      <description>线程安全 测试 按照官方doc , 在多线程环境下访问模块shared data object ,以及handler写入文件系统时都通过加锁保证原子写入
 在进程内多个相同参数调用 logging.getLogger 会返回同1个对象
-多进程日志 通过logging filehandler , 多进程环境下写入相同的日志文件 是安全的吗？
-通过如下代码进行测试，在t_str 超过 8k后 统计&amp;rsquo;test&amp;rsquo; 文件每行长度 发现不一致 ,即写入发送了截断冲突
-查阅 logging 源码 发现 FileHandler 是以&amp;rsquo;a&amp;rsquo; 模式打开文件,按照《The Linux Programming inTerface》：
-O_APPEND 模式 可以保证 每次写入前SEEK_END ，而且为原子操作 (每次系统调用由kernel保证为原子操作)；存在例外为 PIPE,FIFO 在操作时，有PIPE_BUF 的限制,
-[ref1] 中解释为因为PIPE_BUF 限制而出现此问题,但是测试代码写的是REGULAR FILE ，应该不是此问题.
-[ref3] 中给出 调用OS模块OPEN,WRITE 方法的MPFileLogHandler ，经过测试是进程安全的
-是否因为 PYTHON OPEN 函数 与 OS.OPEN 实现不同呢? tobe continued
-# coding :utf-8 from multiprocessing import Pool import logging import datetime import os class MPFileLogHandler(logging.</description>
+可以用 如下 代码测试 ， 注意由于imported modules 是进程级别的, 下面的多线程环境重复IMPORT 不会导致重复IMPORT
+import threading import time def worker(): import logging as lg k = lg.getLogger(&#39;a&#39;) print id(lg),id(k) print &#39;\n&#39; t = threading.Thread(target = worker) t.start() t = threading.Thread(target = worker) t.start()  源码分析 为保证线程安全 , 源码中 主要通过 threading.Rlock 保护 2类 对象: a. module level object
+b. 文件IO
+多进程日志 通过logging filehandler , 多进程环境下写入相同的日志文件 是安全的吗？</description>
     </item>
     
     <item>
