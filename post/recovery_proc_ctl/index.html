@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.51" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Recovery_proc_ctl &middot; jsh</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="jsh" />
+
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://joshua0x.github.io/josh.github.io/"><h1>jsh</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://joshua0x.github.io/josh.github.io/">Home</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Recovery_proc_ctl</h1>
+  <time datetime=2019-02-25T21:28:46&#43;0800 class="post-date">Mon, Feb 25, 2019</time>
+  
+
+<h1 id="0">0</h1>
+
+<p>偶尔看到小四的 一篇文章，描述“远程SHELL中进程因TCP连接中断而失去控制的预防及救急方案”[ref1].
+原始问题如下：
+“在一个SSH会话里执行vi，后因TCP连接中断而失去控制。重新登录后发现原SSH会话对应的伪终端还在，其中的vi进程也在。有什么办法重新获取对vi的控制？
+”<br />
+这个问题还挺有趣  ，从自己的角度复现研究下</p>
+
+<h1 id="psuedo-terminal">psuedo  terminal</h1>
+
+<p>linux 下终端包括硬件终端，伪终端。psuedo terminal 用途是作为某些程序（GUI,文本编辑）与输入输出设备的数据传输。
+通过ssh,telnet 登陆后会话的控制终端一般为/dev/pts/$1 ,不同的会话一般生成不同的pseudo terminal .
+    readlink   -f &lsquo;/proc/15063/fd/0&rsquo;
+    /dev/pts/1</p>
+
+<p>不同的应用程序可以输出至相同的伪终端</p>
+
+<h1 id="如何恢复呢">如何恢复呢</h1>
+
+<p>[ref1]中给出的脚本如下：</p>
+
+<hr />
+
+<p>#!/bin/sh</p>
+
+<h1 id="copyright-timo-lindfors-2004">Copyright Timo Lindfors 2004</h1>
+
+<p>function usage() {
+    echo usage: $0 pid
+    exit 1
+}
+TCGETS=0x5401
+TCSETS=0x5402
+SIZEOF_STRUCT_TERMIOS=60
+O_RDWR=2
+((FLAGS=O_RDWR))</p>
+
+<p>PID=$1
+if [ x<code>which gdb</code> == x ]; then
+    echo gdb not found in PATH. Please apt-get install gdb
+    exit
+fi
+if [ x$PID == x ]; then
+    usage;
+fi
+if [ x$2 != x ]; then
+    usage;
+fi
+MYPID=$$
+MYFD0=<code>readlink /proc/$MYPID/fd/0</code>
+MYFD1=<code>readlink /proc/$MYPID/fd/1</code>
+MYFD2=<code>readlink /proc/$MYPID/fd/2</code>
+EXE=<code>readlink /proc/$PID/exe</code>
+if [ x$EXE == x ]; then
+    echo $0: $PID: no such pid
+    exit 1
+fi</p>
+
+<p>BATCHFILE=<code>mktemp -p /tmp &quot;gdb.$$_${RANDOM}_XXXXXXXXXX&quot;</code>
+cat &gt;$BATCHFILE &lt;<EOF
+file $EXE
+attach $PID
+call (char*)malloc($SIZEOF_STRUCT_TERMIOS)
+call (char*)malloc($SIZEOF_STRUCT_TERMIOS)
+call (char*)malloc($SIZEOF_STRUCT_TERMIOS)
+call (void)ioctl(0, $TCGETS, \$1)
+call (void)ioctl(1, $TCGETS, \$2)
+call (void)ioctl(2, $TCGETS, \$3)
+call (void)close(0)
+call (void)close(1)
+call (void)close(2)
+call (int)open("$MYFD0", $FLAGS)
+call (int)open("$MYFD1", $FLAGS)
+call (int)open("$MYFD2", $FLAGS)
+call (void)ioctl(0, $TCSETS, \$1)
+call (void)ioctl(1, $TCSETS, \$2)
+call (void)ioctl(2, $TCSETS, \$3)
+call (void)free(\$1)
+call (void)free(\$2)
+call (void)free(\$3)
+detach
+EOF
+gdb -batch -x $BATCHFILE >/dev/null 2&gt;&amp;1</p>
+
+<p>基本原理是 用GDB 调试目标进程，获取终端属性，关闭与终端关联的fd(0,1,2),
+将stdin,stdout,stderr关联到当前会话的伪终端，恢复终端属性.</p>
+
+<p>没有按照ref1 中场景去做验证，而是开启2个ssh会话，在1中开vi 进程，在2中执行上述脚本，发现2获取了1中vi进程的控制，而1中则失去控制。</p>
+
+<h1 id="gdb">gdb</h1>
+
+<p>以上原理听起来比较简单，但是细想下通过gdb 修改运行中程序的状态还是比较神奇的，以前对gdb的认知还以为是只读的。</p>
+
+<h2 id="gdb-调试原理">gdb 调试原理</h2>
+
+<p>使用gdb 调试进程时，经常需要在特定函数或行处 设置断点，那gdb如何获取指令地址呢？
+[ref2]中给出了初步的解释，gcc 编译时 添加-g 选项会在elf中生成调试段，
+debug section  完成源码文件行号与机器码地址的映射（当然还有其他信息，此处只做基本概括）。
+gdb涉及程序的编译、链接、动态加载,还有待深入学习。</p>
+
+<p>#ref
+[1] <a href="http://blog.nsfocus.net/processes-remote-shell-lose-control-emergency-rescue-due-tcp-connection-interruption/">http://blog.nsfocus.net/processes-remote-shell-lose-control-emergency-rescue-due-tcp-connection-interruption/</a></p>
+
+<p>[2]<a href="https://eli.thegreenplace.net/2011/02/07/how-debuggers-work-part-3-debugging-information#id8">https://eli.thegreenplace.net/2011/02/07/how-debuggers-work-part-3-debugging-information#id8</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>
