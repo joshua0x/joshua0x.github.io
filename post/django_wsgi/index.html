@@ -71,17 +71,20 @@
 <h2 id="python-gil">python  GIL</h2>
 
 <p>cpython，在调度执行多线程代码时 ，每个线程执行前需要获取锁，但是GIL的存在并不能使得python 多线程在操作共享变量时达到线程安全的效果。由于python下的单行语句编译得到字节码后可能是多条指令 ，指令间可能发生线程调度。
-考虑如下代码：
-    import threading
-    import time
-    zero = 0
-    def change_zero():
-        global zero
-        for i in range(3000000):
-            zero += 1 #23
-            zero -= 1 #24</p>
+考虑如下代码：</p>
 
-<pre><code>th1 = threading.Thread(target = change_zero)
+<pre><code>import threading
+import time
+zero = 0
+def change_zero():  
+
+    global zero
+    for i in range(3000000):  
+
+        zero += 1 #23
+        zero -= 1 #24
+
+th1 = threading.Thread(target = change_zero)
 th2 = threading.Thread(target = change_zero)
 th1.start()
 th2.start()
@@ -92,11 +95,10 @@ print(zero)
 
 <p>由于 #23,24 包含多条字节码    以上程序不能保证最好=后输出  0</p>
 
-<pre><code># 环境与测试
+<pre><code># 环境与测试  
+
 DJANGO  代码 一般包含 view  model 层，由于单个进程  包含多个线程  ，对于view  model  层的脚本中module level 的对象都是共享的，而且这类对象的生命期与进程一致，这样可能在多次HTTP请求间产生副作用。
 通过线程安全的logging 模块记录结果，可以验证。
-
-## refs 
 </code></pre>
 
 </div>

@@ -86,7 +86,7 @@ t.start()
 
 <p>b. 文件IO</p>
 
-<h2 id="多进程日志">多进程日志</h2>
+<h2 id="多进程写日志">多进程写日志</h2>
 
 <p>通过logging  filehandler , 多进程环境下写入相同的日志文件 是安全的吗？</p>
 
@@ -96,7 +96,7 @@ t.start()
 O_APPEND  模式 可以保证 每次写入前SEEK_END ，而且为原子操作 (每次系统调用由kernel保证为原子操作)；存在例外为 PIPE,FIFO 在操作时，有PIPE_BUF 的限制,</p>
 
 <p>[ref1] 中解释为因为PIPE_BUF 限制而出现此问题,但是测试代码写的是REGULAR  FILE ，应该不是此问题.<br />
-[ref3] 中给出 调用OS模块OPEN,WRITE 方法的MPFileLogHandler ，经过测试是进程安全的</p>
+[ref3] 中给出的MPFileLogHandler ，经过测试是进程安全的,</p>
 
 <p>是否因为 PYTHON  OPEN 函数 与    OS.OPEN 实现不同呢?  tobe continued</p>
 
@@ -106,11 +106,13 @@ import logging
 import datetime  
 import os 
 class MPFileLogHandler(logging.Handler):
-    def __init__(self, file_path):
+    def __init__(self, file_path):      
+
     self._fd = os.open(file_path, os.O_WRONLY | os.O_CREAT | os.O_APPEND)
     logging.Handler.__init__(self)
 
-    def emit(self, record):
+    def emit(self, record):    
+
     msg = &quot;{}\n&quot;.format(self.format(record))
     os.write(self._fd, msg.encode('utf-8'))
 def process_log(p_off):
@@ -119,7 +121,8 @@ def process_log(p_off):
     logger = logging.getLogger('test')
     logger.addHandler(logger_handler)
     logger.setLevel(logging.DEBUG)
-    for x in range(0, 200):
+    for x in range(0, 200):   
+
     d = datetime.datetime.now()
     t_str = 'test' *10 # 
     logger.info('{}:{}:p_off({}):pid({})'.format(t_str, d.strftime('%Y-%m-%d %H:%M:%S'), p_off, os.getpid()))
@@ -127,7 +130,8 @@ def process_log(p_off):
 #process_log(1)
 if __name__ == '__main__':
     p = Pool(4)
-    for i in range(32):
+    for i in range(32):   
+
     p.apply_async(process_log, args=(i,))
     print  'waiting.....'
     p.close()

@@ -108,7 +108,8 @@ ref https://downloads.egenix.com/python/Unicode-EPC2002-Talk.pdf https://blog.cs
   <time datetime="2019-01-06T13:40:49&#43;0800" class="post-date">Sun, Jan 6, 2019</time>
   DJANGO 线程安全 在项目中 基于 APACHE DJANGO 搭建WEB 服务. DJANGO APACHE 间基于WSGI协议通信。mod_wsgi 模块以daemon-mode 运行 ，APACHE 进程与 mod_wsgi 进程 通过UNIX SOCKET 通信。在daemon-mode 下 ，可以配置进程 与线程数目，对于每个进程会启动一个python interpreter ,其会生成1个wsgiHandler
 apache conf 如下： WSGIScriptAlias / &ldquo;YOUR_PATH/wsgi.py&rdquo; WSGIDaemonProcess 10.67.20.1 processes=2 threads=15 WSGIProcessGroup 10.67.20.1 Order Deny,Allow Allow from all 
-python GIL cpython，在调度执行多线程代码时 ，每个线程执行前需要获取锁，但是GIL的存在并不能使得python 多线程在操作共享变量时达到线程安全的效果。由于python下的单行语句编译得到字节码后可能是多条指令 ，指令间可能发生线程调度。 考虑如下代码： import threading import time zero = 0 def change_zero(): global zero for i in range(3000000): zero += 1 #23 zero -= 1 #24
+python GIL cpython，在调度执行多线程代码时 ，每个线程执行前需要获取锁，但是GIL的存在并不能使得python 多线程在操作共享变量时达到线程安全的效果。由于python下的单行语句编译得到字节码后可能是多条指令 ，指令间可能发生线程调度。 考虑如下代码：
+import threading import time zero = 0 def change_zero(): global zero for i in range(3000000): zero += 1 #23 zero -= 1 #24 th1 = threading.
   
   <div class="read-more-link">
     <a href="/josh.github.io/post/django_wsgi/">Read More…</a>
@@ -125,7 +126,7 @@ python GIL cpython，在调度执行多线程代码时 ，每个线程执行前�
 import threading import time def worker(): import logging as lg k = lg.getLogger('a') print id(lg),id(k) print '\n' t = threading.Thread(target = worker) t.start() t = threading.Thread(target = worker) t.start()  源码分析 为保证线程安全 , 源码中 主要通过 threading.Rlock 保护 2类 对象:
 a. module level object
 b. 文件IO
-多进程日志 通过logging filehandler , 多进程环境下写入相同的日志文件 是安全的吗？
+多进程写日志 通过logging filehandler , 多进程环境下写入相同的日志文件 是安全的吗？
   
   <div class="read-more-link">
     <a href="/josh.github.io/post/logging_safety/">Read More…</a>
