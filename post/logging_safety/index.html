@@ -143,47 +143,44 @@ if __name__ == '__main__':
 <p>TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境下 对同1个日志处理时  安全吗？
 简化的代码如下：</p>
 
-<pre><code>def doRollover(self):
-    if self.stream:
-    self.stream.close()
-    self.stream = None
-    # get the time that this sequence started at and make it a TimeTuple
-    dfn = self.baseFilename + &quot;.&quot; + time.strftime(self.suffix, timeTuple)
-    if os.path.exists(dfn):
-    os.remove(dfn)
-    if os.path.exists(self.baseFilename):
-    os.rename(self.baseFilename, dfn)
-    self.rolloverAt = newRolloverAt
-</code></pre>
+<pre><code class="language-def">	    if self.stream:
+		self.stream.close()
+		self.stream = None
+	    # get the time that this sequence started at and make it a TimeTuple
+	    dfn = self.baseFilename + &quot;.&quot; + time.strftime(self.suffix, timeTuple)
+	    if os.path.exists(dfn):
+		os.remove(dfn)
+	    if os.path.exists(self.baseFilename):
+		os.rename(self.baseFilename, dfn)
+	    self.rolloverAt = newRolloverAt
 
-<p>显然在多进程都调用  时  存在 其他 删除 已经 完成分割进程 的 日志文件的可能</p>
+显然在多进程都调用  时  存在 其他 删除 已经 完成分割进程 的 日志文件的可能
 
-<h2 id="timedrotatingfilehandler-mp">TimedRotatingFileHandler_MP</h2>
+##  TimedRotatingFileHandler_MP     
+通过文件锁  保证 多进程安全写入
 
-<p>通过文件锁  保证 多进程安全写入</p>
+	    def emit(self, record):
+		&quot;&quot;&quot;
+		Emit a record.
 
-<pre><code>    def emit(self, record):
-    &quot;&quot;&quot;
-    Emit a record.
-
-    Output the record to the file, catering for rollover as described
-    in doRollover().
-
-    For multiprocess, we use file lock. Any better method ?
-    &quot;&quot;&quot;
-    try:
-        if self.shouldRollover(record):
-        self.doRollover()
-        FileLock = self._lock_dir + '/' + os.path.basename(self.baseFilename) + '.' + record.levelname
-        f = open(FileLock, &quot;w+&quot;)
-        fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-        FileHandler_MP.emit(self, record)
-        fcntl.flock(f.fileno(), fcntl.LOCK_UN)
-        f.close()
-    except (KeyboardInterrupt, SystemExit):
-        raise
-    except:
-        self.handleError(record)
+		Output the record to the file, catering for rollover as described
+		in doRollover().
+		
+		For multiprocess, we use file lock. Any better method ?
+		&quot;&quot;&quot;
+		try:
+		    if self.shouldRollover(record):
+			self.doRollover()
+		    FileLock = self._lock_dir + '/' + os.path.basename(self.baseFilename) + '.' + record.levelname
+		    f = open(FileLock, &quot;w+&quot;)
+		    fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+		    FileHandler_MP.emit(self, record)
+		    fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+		    f.close()
+		except (KeyboardInterrupt, SystemExit):
+		    raise
+		except:
+		    self.handleError(record)
 </code></pre>
 
 <p>但是在文件分割阶段  依旧存在  TimedRotatingFileHandler 中所述问题</p>
