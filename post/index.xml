@@ -12,19 +12,18 @@
     
     
     <item>
-      <title>Recovery_proc_ctl</title>
+      <title>恢复丢失进程的控制</title>
       <link>https://joshua0x.github.io/josh.github.io/post/recovery_proc_ctl/</link>
       <pubDate>Mon, 25 Feb 2019 21:28:46 +0800</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/recovery_proc_ctl/</guid>
-      <description>0 偶尔看到小四的 一篇文章，描述“远程SHELL中进程因TCP连接中断而失去控制的预防及救急方案”[ref1]. 原始问题如下： “在一个SSH会话里执行vi，后因TCP连接中断而失去控制。重新登录后发现原SSH会话对应的伪终端还在，其中的vi进程也在。有什么办法重新获取对vi的控制？ ”
+      <description>0 偶尔看到小四的 一篇文章，描述“远程SHELL中进程因TCP连接中断而失去控制的预防及救急方案”[ref1].
+原始问题如下： “在一个SSH会话里执行vi，后因TCP连接中断而失去控制。重新登录后发现原SSH会话对应的伪终端还在，其中的vi进程也在。有什么办法重新获取对vi的控制？ ”
 这个问题还挺有趣 ，从自己的角度复现研究下
-psuedo terminal linux 下终端包括硬件终端，伪终端。psuedo terminal 用途是作为某些程序（GUI,文本编辑）与输入输出设备的数据传输。 通过ssh,telnet 登陆后会话的控制终端一般为/dev/pts/$1 ,不同的会话一般生成不同的pseudo terminal . readlink -f &amp;lsquo;/proc/15063/fd/0&amp;rsquo; /dev/pts/1
-不同的应用程序可以输出至相同的伪终端
+psuedo terminal linux 下终端包括硬件终端，伪终端。psuedo terminal 用途是作为某些程序（GUI,文本编辑）与输入输出设备的数据传输。 通过ssh,telnet 登陆后会话的控制终端一般为/dev/pts/$1 ,不同的会话一般生成不同的pseudo terminal .
+readlink -f &#39;/proc/15063/fd/0&#39; /dev/pts/1  不同的应用程序可以输出至相同的伪终端
 如何恢复呢 [ref1]中给出的脚本如下：
-#!/bin/sh
-Copyright Timo Lindfors 2004 function usage() { echo usage: $0 pid exit 1 } TCGETS=0x5401 TCSETS=0x5402 SIZEOF_STRUCT_TERMIOS=60 O_RDWR=2 ((FLAGS=O_RDWR))
-PID=$1 if [ xwhich gdb == x ]; then echo gdb not found in PATH. Please apt-get install gdb exit fi if [ x$PID == x ]; then usage; fi if [ x$2 !</description>
+#!/bin/sh function usage() { echo usage: $0 pid exit 1 } TCGETS=0x5401 TCSETS=0x5402 SIZEOF_STRUCT_TERMIOS=60 O_RDWR=2 ((FLAGS=O_RDWR)) PID=$1 if [ x`which gdb` == x ]; then echo gdb not found in PATH. Please apt-get install gdb exit fi if [ x$PID == x ]; then usage; fi if [ x$2 !</description>
     </item>
     
     <item>
