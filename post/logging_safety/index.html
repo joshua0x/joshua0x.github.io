@@ -100,61 +100,64 @@ O_APPEND  模式 可以保证 每次写入前SEEK_END ，而且为原子操作 (
 
 <p>是否因为 PYTHON  OPEN 函数 与    OS.OPEN 实现不同呢?  tobe continued</p>
 
-<pre><code># coding :utf-8
-from multiprocessing import  Pool
-import logging
-import datetime  
-import os 
-class MPFileLogHandler(logging.Handler):
-    def __init__(self, file_path):      
+<pre><code>	# coding :utf-8
+	from multiprocessing import  Pool
+	import logging
+	import datetime  
+	import os 
+	class MPFileLogHandler(logging.Handler):
+	    def __init__(self, file_path):      
 
-    self._fd = os.open(file_path, os.O_WRONLY | os.O_CREAT | os.O_APPEND)
-    logging.Handler.__init__(self)
+		self._fd = os.open(file_path, os.O_WRONLY | os.O_CREAT | os.O_APPEND)
+		logging.Handler.__init__(self)
 
-    def emit(self, record):    
+	    def emit(self, record):    
 
-    msg = &quot;{}\n&quot;.format(self.format(record))
-    os.write(self._fd, msg.encode('utf-8'))
-def process_log(p_off):
-    #logger_handler = MPFileLogHandler('test')
-    logger_handler = logging.FileHandler('test')
-    logger = logging.getLogger('test')
-    logger.addHandler(logger_handler)
-    logger.setLevel(logging.DEBUG)
-    for x in range(0, 200):   
+		msg = &quot;{}\n&quot;.format(self.format(record))
+		os.write(self._fd, msg.encode('utf-8'))
+	def process_log(p_off):
+	    #logger_handler = MPFileLogHandler('test')
+	    logger_handler = logging.FileHandler('test')
+	    logger = logging.getLogger('test')
+	    logger.addHandler(logger_handler)
+	    logger.setLevel(logging.DEBUG)
+	    for x in range(0, 200):   
 
-    d = datetime.datetime.now()
-    t_str = 'test' *10 # 
-    logger.info('{}:{}:p_off({}):pid({})'.format(t_str, d.strftime('%Y-%m-%d %H:%M:%S'), p_off, os.getpid()))
+		d = datetime.datetime.now()
+		t_str = 'test' *10 # 
+		logger.info('{}:{}:p_off({}):pid({})'.format(t_str, d.strftime('%Y-%m-%d %H:%M:%S'), p_off, os.getpid()))
 
-#process_log(1)
-if __name__ == '__main__':
-    p = Pool(4)
-    for i in range(32):   
+	#process_log(1)
+	if __name__ == '__main__':
+	    p = Pool(4)
+	    for i in range(32):   
 
-    p.apply_async(process_log, args=(i,))
-    print  'waiting.....'
-    p.close()
-    p.join()
+		p.apply_async(process_log, args=(i,))
+	    print  'waiting.....'
+	    p.close()
+	    p.join()
+```	 
+
+##  TimedRotatingFileHandler
+TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境下 对同1个日志处理时  安全吗？
+简化的代码如下：
+
 </code></pre>
 
-<h2 id="timedrotatingfilehandler">TimedRotatingFileHandler</h2>
+<pre><code>def doRollover(self):
+    if self.stream:
+    self.stream.close()
+    self.stream = None
+    # get the time that this sequence started at and make it a TimeTuple
+    dfn = self.baseFilename + &quot;.&quot; + time.strftime(self.suffix, timeTuple)
+    if os.path.exists(dfn):
+    os.remove(dfn)
+    if os.path.exists(self.baseFilename):
+    os.rename(self.baseFilename, dfn)
+    self.rolloverAt = newRolloverAt
+</code></pre>
 
-<p>TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境下 对同1个日志处理时  安全吗？
-简化的代码如下：</p>
-
-<pre><code class="language-def">	    if self.stream:
-		self.stream.close()
-		self.stream = None
-	    # get the time that this sequence started at and make it a TimeTuple
-	    dfn = self.baseFilename + &quot;.&quot; + time.strftime(self.suffix, timeTuple)
-	    if os.path.exists(dfn):
-		os.remove(dfn)
-	    if os.path.exists(self.baseFilename):
-		os.rename(self.baseFilename, dfn)
-	    self.rolloverAt = newRolloverAt
-
-显然在多进程都调用  时  存在 其他 删除 已经 完成分割进程 的 日志文件的可能
+<pre><code>显然在多进程都调用  时  存在 其他 删除 已经 完成分割进程 的 日志文件的可能
 
 ##  TimedRotatingFileHandler_MP     
 通过文件锁  保证 多进程安全写入
