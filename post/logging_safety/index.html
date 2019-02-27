@@ -168,7 +168,7 @@ handle 函数是handler基类的函数，其他的Handler实现直接或者间�
 <pre><code>
 
 
-###  TimedRotatingFileHandler
+## TimedRotatingFileHandler 
 TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境下 对同1个日志处理时  安全吗？
 简化的代码如下：
 
@@ -218,11 +218,7 @@ TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境�
 
 <p>文件分割阶段  依旧存在  TimedRotatingFileHandler 中所述问题</p>
 
-<h2 id="refs">refs</h2>
-
 <h2 id="concurrentloghandler">ConcurrentLogHandler</h2>
-
-<h2 id="refs-1">refs</h2>
 
 <p>ConcurrentLogHandler  重写了基类 Handler  acquire 方法  ,  按照文件大小分割
 通过文件的 排他锁保证单个进程的分割是原子的，下个进程在判断是否需要分割时 ，对已经分割完的文件进行判断
@@ -254,7 +250,7 @@ TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境�
 		# Stream will be opened as part by FileHandler.emit()
 </code></pre>
 
-<h2 id="refs-2">refs</h2>
+<h2 id="refs">refs</h2>
 
 <p>[0]<a href="https://stackoverflow.com/questions/12111127/how-standard-specify-atomic-write-to-regular-filenot-pipe-or-fifo">https://stackoverflow.com/questions/12111127/how-standard-specify-atomic-write-to-regular-filenot-pipe-or-fifo</a></p>
 
