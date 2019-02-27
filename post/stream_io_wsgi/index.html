@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.51" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>django   StreamingHttpResponse  分析 &middot; jsh</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="jsh" />
+
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://joshua0x.github.io/josh.github.io/"><h1>jsh</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://joshua0x.github.io/josh.github.io/">Home</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>django   StreamingHttpResponse  分析</h1>
+  <time datetime=2019-02-27T20:03:05&#43;0800 class="post-date">Wed, Feb 27, 2019</time>
+  
+
+<h1 id="应用场景">应用场景</h1>
+
+<p>在客户端从服务器下载大文件时, 可以逐步从硬盘加载文件内容到内存，并立即传输至对端，
+StreamingHttpResponse  实现了这种功能</p>
+
+<h1 id="服务端框架">服务端框架</h1>
+
+<p>apache2.4  mod_wsgi    django1.8</p>
+
+<h1 id="源码阅读">源码阅读</h1>
+
+<p>类定义如下,在应用中生成器实例初始化得到StreamingHttpResponse实例,返回给mod_wsgi</p>
+
+<pre><code>
+    def file_iterator(file_name, chunk_size=512):
+        with open(file_name) as f:
+            while True:
+                c = f.read(chunk_size)
+                if c:
+                    yield c
+                else:
+                    break
+
+    response = StreamingHttpResponse(file_iterator(the_file_name))
+
+</code></pre>
+
+<p>以上是一种典型的用法</p>
+
+<pre><code>
+class StreamingHttpResponse(HttpResponseBase):
+    &quot;&quot;&quot;
+    A streaming HTTP response class with an iterator as content.
+
+    This should only be iterated once, when the response is streamed to the
+    client. However, it can be appended to or replaced with a new iterator
+    that wraps the original content (or yields entirely new content).
+    &quot;&quot;&quot;
+
+    streaming = True
+
+    def __init__(self, streaming_content=(), *args, **kwargs):
+        super(StreamingHttpResponse, self).__init__(*args, **kwargs)
+        # `streaming_content` should be an iterable of bytestrings.
+        # See the `streaming_content` property methods.
+        self.streaming_content = streaming_content
+
+    @property
+    def content(self):
+        raise AttributeError(&quot;This %s instance has no `content` attribute. &quot;
+            &quot;Use `streaming_content` instead.&quot; % self.__class__.__name__)
+
+    @property
+    def streaming_content(self):
+        return map(self.make_bytes, self._iterator)
+
+    @streaming_content.setter
+    def streaming_content(self, value):
+        self._set_streaming_content(value)
+
+    def _set_streaming_content(self, value):
+        # Ensure we can never iterate on &quot;value&quot; more than once.
+        self._iterator = iter(value)
+        if hasattr(value, 'close'):
+            self._closable_objects.append(value)
+
+    def __iter__(self):
+        return self.streaming_content
+
+    def getvalue(self):
+        return b''.join(self.streaming_content)
+
+
+</code></pre>
+
+<p>mod_wsgi  迭代streaming_content  获取内容  并按照chunked-transfer 组装成二进制流</p>
+
+<h1 id="transfer-encoding-chunked">Transfer-Encoding: chunked</h1>
+
+<p>http协议中 ，客户端判断一次HTTP response 的结束 可以通过socket 返回0  、  content-length(HTTP  header) 等方式，
+在chunked   transfer 下，  可以通过特殊格式的编码来判断1次完整的response 。详细格式定义可参考 ref1</p>
+
+<p>#refs
+[1]<a href="https://imququ.com/post/transfer-encoding-header-in-http.html">https://imququ.com/post/transfer-encoding-header-in-http.html</a>
+[2]<a href="https://andrewbrookins.com/django/how-does-djangos-streaminghttpresponse-work-exactly/">https://andrewbrookins.com/django/how-does-djangos-streaminghttpresponse-work-exactly/</a>
+[3]<a href="https://rhodesmill.org/brandon/2013/chunked-wsgi/">https://rhodesmill.org/brandon/2013/chunked-wsgi/</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

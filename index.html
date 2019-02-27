@@ -53,6 +53,21 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://joshua0x.github.io/josh.github.io/post/stream_io_wsgi/">django   StreamingHttpResponse  分析</a>
+  </h1>
+  <time datetime="2019-02-27T20:03:05&#43;0800" class="post-date">Wed, Feb 27, 2019</time>
+  应用场景 在客户端从服务器下载大文件时, 可以逐步从硬盘加载文件内容到内存，并立即传输至对端， StreamingHttpResponse 实现了这种功能
+服务端框架 apache2.4 mod_wsgi django1.8
+源码阅读 类定义如下,在应用中生成器实例初始化得到StreamingHttpResponse实例,返回给mod_wsgi
+ def file_iterator(file_name, chunk_size=512): with open(file_name) as f: while True: c = f.read(chunk_size) if c: yield c else: break response = StreamingHttpResponse(file_iterator(the_file_name))  以上是一种典型的用法
+ class StreamingHttpResponse(HttpResponseBase): &quot;&quot;&quot; A streaming HTTP response class with an iterator as content. This should only be iterated once, when the response is streamed to the client. However, it can be appended to or replaced with a new iterator that wraps the original content (or yields entirely new content).
+  
+  <div class="read-more-link">
+    <a href="/josh.github.io/post/stream_io_wsgi/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://joshua0x.github.io/josh.github.io/post/recovery_proc_ctl/">恢复丢失进程的控制</a>
   </h1>
   <time datetime="2019-02-25T21:28:46&#43;0800" class="post-date">Mon, Feb 25, 2019</time>
