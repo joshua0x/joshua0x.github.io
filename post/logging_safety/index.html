@@ -136,6 +136,7 @@ O_APPEND  模式 可以保证 每次写入前SEEK_END ，而且为原子操作 (
 	    print  'waiting.....'
 	    p.close()
 	    p.join()
+
 ```	 
 
 
@@ -168,11 +169,12 @@ handle 函数是handler基类的函数，其他的Handler实现直接或者间�
 <pre><code>
 
 
-## TimedRotatingFileHandler 
+###   TimedRotatingFileHandler 
 TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境下 对同1个日志处理时  安全吗？
 简化的代码如下：
 
 ```python
+
 	def doRollover(self):
 	    if self.stream:
 		self.stream.close()
@@ -184,6 +186,7 @@ TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境�
 	    if os.path.exists(self.baseFilename):
 		os.rename(self.baseFilename, dfn)
 	    self.rolloverAt = newRolloverAt
+
 </code></pre>
 
 <p>显然在多进程都调用  时  存在 其他进程  删除 已经 完成分割进程的日志文件的可能</p>
@@ -248,6 +251,7 @@ TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境�
 			    return
 		    lock(self.stream_lock, LOCK_EX)
 		# Stream will be opened as part by FileHandler.emit()
+
 </code></pre>
 
 <h2 id="refs">refs</h2>
