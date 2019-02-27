@@ -172,97 +172,89 @@ handle 函数是handler基类的函数，其他的Handler实现直接或者间�
 TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境下 对同1个日志处理时  安全吗？
 简化的代码如下：
 
+```python
+	def doRollover(self):
+	    if self.stream:
+		self.stream.close()
+		self.stream = None
+	    # get the time that this sequence started at and make it a TimeTuple
+	    dfn = self.baseFilename + &quot;.&quot; + time.strftime(self.suffix, timeTuple)
+	    if os.path.exists(dfn):
+		os.remove(dfn)
+	    if os.path.exists(self.baseFilename):
+		os.rename(self.baseFilename, dfn)
+	    self.rolloverAt = newRolloverAt
 </code></pre>
 
-<pre><code>def doRollover(self):
-    if self.stream:
-    self.stream.close()
-    self.stream = None
-    # get the time that this sequence started at and make it a TimeTuple
-    dfn = self.baseFilename + &quot;.&quot; + time.strftime(self.suffix, timeTuple)
-    if os.path.exists(dfn):
-    os.remove(dfn)
-    if os.path.exists(self.baseFilename):
-    os.rename(self.baseFilename, dfn)
-    self.rolloverAt = newRolloverAt
+<p>显然在多进程都调用  时  存在 其他进程  删除 已经 完成分割进程的日志文件的可能</p>
+
+<h3 id="timedrotatingfilehandler-mp">TimedRotatingFileHandler_MP</h3>
+
+<p>关键函数如下</p>
+
+<pre><code>	    def emit(self, record):
+		&quot;&quot;&quot;
+		Emit a record.
+
+		Output the record to the file, catering for rollover as described
+		in doRollover().
+		
+		For multiprocess, we use file lock. Any better method ?
+		&quot;&quot;&quot;
+		try:
+		    if self.shouldRollover(record):
+			self.doRollover()
+		    FileLock = self._lock_dir + '/' + os.path.basename(self.baseFilename) + '.' + record.levelname
+		    f = open(FileLock, &quot;w+&quot;)
+		    fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+		    FileHandler_MP.emit(self, record)
+		    fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+		    f.close()
+		except (KeyboardInterrupt, SystemExit):
+		    raise
+		except:
+		    self.handleError(record)
 </code></pre>
 
-<pre><code>
-
-
-
-显然在多进程都调用  时  存在 其他进程  删除 已经 完成分割进程的日志文件的可能
-
-###   TimedRotatingFileHandler_MP     
-关键函数如下 
-</code></pre>
-
-<pre><code>    def emit(self, record):
-    &quot;&quot;&quot;
-    Emit a record.
-
-    Output the record to the file, catering for rollover as described
-    in doRollover().
-
-    For multiprocess, we use file lock. Any better method ?
-    &quot;&quot;&quot;
-    try:
-        if self.shouldRollover(record):
-        self.doRollover()
-        FileLock = self._lock_dir + '/' + os.path.basename(self.baseFilename) + '.' + record.levelname
-        f = open(FileLock, &quot;w+&quot;)
-        fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-        FileHandler_MP.emit(self, record)
-        fcntl.flock(f.fileno(), fcntl.LOCK_UN)
-        f.close()
-    except (KeyboardInterrupt, SystemExit):
-        raise
-    except:
-        self.handleError(record)
-</code></pre>
-
-<pre><code>文件分割阶段  依旧存在  TimedRotatingFileHandler 中所述问题
-
-## refs 
-##  ConcurrentLogHandler 
-
-## refs 
-
-ConcurrentLogHandler  重写了基类 Handler  acquire 方法  ,  按照文件大小分割
-通过文件的 排他锁保证单个进程的分割是原子的，下个进程在判断是否需要分割时 ，对已经分割完的文件进行判断
-可见可以安全地分割文件 
-
-</code></pre>
-
-<pre><code>    def acquire(self):
-    &quot;&quot;&quot; Acquire thread and file locks.  Re-opening log for 'degraded' mode.
-    &quot;&quot;&quot;
-    # handle thread lock
-    Handler.acquire(self)
-    # Issue a file lock.  (This is inefficient for multiple active threads
-    # within a single process. But if you're worried about high-performance,
-    # you probably aren't using this log handler.)
-    if self.stream_lock:
-        # If stream_lock=None, then assume close() was called or something
-        # else weird and ignore all file-level locks.
-        if self.stream_lock.closed:
-        # Daemonization can close all open file descriptors, see
-        # https://bugzilla.redhat.com/show_bug.cgi?id=952929
-        # Try opening the lock file again.  Should we warn() here?!?
-        try:
-            self._open_lockfile()
-        except Exception:
-            self.handleError(NullLogRecord())
-            # Don't try to open the stream lock again
-            self.stream_lock = None
-            return
-        lock(self.stream_lock, LOCK_EX)
-    # Stream will be opened as part by FileHandler.emit()
-</code></pre>
-
-<p>```</p>
+<p>文件分割阶段  依旧存在  TimedRotatingFileHandler 中所述问题</p>
 
 <h2 id="refs">refs</h2>
+
+<h2 id="concurrentloghandler">ConcurrentLogHandler</h2>
+
+<h2 id="refs-1">refs</h2>
+
+<p>ConcurrentLogHandler  重写了基类 Handler  acquire 方法  ,  按照文件大小分割
+通过文件的 排他锁保证单个进程的分割是原子的，下个进程在判断是否需要分割时 ，对已经分割完的文件进行判断
+可见可以安全地分割文件</p>
+
+<pre><code>	    def acquire(self):
+		&quot;&quot;&quot; Acquire thread and file locks.  Re-opening log for 'degraded' mode.
+		&quot;&quot;&quot;
+		# handle thread lock
+		Handler.acquire(self)
+		# Issue a file lock.  (This is inefficient for multiple active threads
+		# within a single process. But if you're worried about high-performance,
+		# you probably aren't using this log handler.)
+		if self.stream_lock:
+		    # If stream_lock=None, then assume close() was called or something
+		    # else weird and ignore all file-level locks.
+		    if self.stream_lock.closed:
+			# Daemonization can close all open file descriptors, see
+			# https://bugzilla.redhat.com/show_bug.cgi?id=952929
+			# Try opening the lock file again.  Should we warn() here?!?
+			try:
+			    self._open_lockfile()
+			except Exception:
+			    self.handleError(NullLogRecord())
+			    # Don't try to open the stream lock again
+			    self.stream_lock = None
+			    return
+		    lock(self.stream_lock, LOCK_EX)
+		# Stream will be opened as part by FileHandler.emit()
+</code></pre>
+
+<h2 id="refs-2">refs</h2>
 
 <p>[0]<a href="https://stackoverflow.com/questions/12111127/how-standard-specify-atomic-write-to-regular-filenot-pipe-or-fifo">https://stackoverflow.com/questions/12111127/how-standard-specify-atomic-write-to-regular-filenot-pipe-or-fifo</a></p>
 
