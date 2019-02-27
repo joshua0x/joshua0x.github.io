@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>python logging safety &middot; jsh</title>
+  <title>python logging  安全 &middot; jsh</title>
 
   
   <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/print.css" media="print">
@@ -51,7 +51,7 @@
 
     <main class="content container">
     <div class="post">
-  <h1>python logging safety</h1>
+  <h1>python logging  安全</h1>
   <time datetime=2019-01-06T13:40:49&#43;0800 class="post-date">Sun, Jan 6, 2019</time>
   
 
@@ -138,6 +138,8 @@ O_APPEND  模式 可以保证 每次写入前SEEK_END ，而且为原子操作 (
 	    p.join()
 ```	 
 
+
+
 ##   日志分割
 下面考虑多进程写系统日志   日志分割时的安全性
 对于每条日志  ，处理流程如下：
@@ -163,7 +165,10 @@ handle 函数是handler基类的函数，其他的Handler实现直接或者间�
     return rv
 </code></pre>
 
-<pre><code>###  TimedRotatingFileHandler
+<pre><code>
+
+
+###  TimedRotatingFileHandler
 TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境下 对同1个日志处理时  安全吗？
 简化的代码如下：
 
@@ -182,7 +187,11 @@ TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境�
     self.rolloverAt = newRolloverAt
 </code></pre>
 
-<pre><code>显然在多进程都调用  时  存在 其他进程  删除 已经 完成分割进程的日志文件的可能
+<pre><code>
+
+
+
+显然在多进程都调用  时  存在 其他进程  删除 已经 完成分割进程的日志文件的可能
 
 ###   TimedRotatingFileHandler_MP     
 关键函数如下 
@@ -212,7 +221,12 @@ TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境�
         self.handleError(record)
 </code></pre>
 
-<pre><code>在文件分割阶段  依旧存在  TimedRotatingFileHandler 中所述问题
+<pre><code>
+
+
+
+
+文件分割阶段  依旧存在  TimedRotatingFileHandler 中所述问题
 
 ##  ConcurrentLogHandler 
 

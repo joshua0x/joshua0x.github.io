@@ -78,7 +78,7 @@ import threading import time zero = 0 def change_zero(): global zero for i in ra
     </item>
     
     <item>
-      <title>python logging safety</title>
+      <title>python logging  安全</title>
       <link>https://joshua0x.github.io/josh.github.io/post/logging_safety/</link>
       <pubDate>Sun, 06 Jan 2019 13:40:49 +0800</pubDate>
       
