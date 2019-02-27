@@ -221,14 +221,12 @@ TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境�
         self.handleError(record)
 </code></pre>
 
-<pre><code>
+<pre><code>文件分割阶段  依旧存在  TimedRotatingFileHandler 中所述问题
 
-
-
-
-文件分割阶段  依旧存在  TimedRotatingFileHandler 中所述问题
-
+## refs 
 ##  ConcurrentLogHandler 
+
+## refs 
 
 ConcurrentLogHandler  重写了基类 Handler  acquire 方法  ,  按照文件大小分割
 通过文件的 排他锁保证单个进程的分割是原子的，下个进程在判断是否需要分割时 ，对已经分割完的文件进行判断
