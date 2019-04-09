@@ -6,10 +6,24 @@
     <description>Recent content in Posts on jsh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 27 Feb 2019 20:03:05 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 09 Apr 2019 19:56:28 +0800</lastBuildDate>
     
 	<atom:link href="https://joshua0x.github.io/josh.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ssh  port forward</title>
+      <link>https://joshua0x.github.io/josh.github.io/post/ssh_tun/</link>
+      <pubDate>Tue, 09 Apr 2019 19:56:28 +0800</pubDate>
+      
+      <guid>https://joshua0x.github.io/josh.github.io/post/ssh_tun/</guid>
+      <description>#ssh 端口转发 通常将ssh用于远程登陆获得shell，替代telnet，以加密通信流量。ssh的端口转发可以将其他TCP PORT 的流量通过 ssh 通道传输，以保护Telnet，SMTP，LDAP等明文协议。 #原理
+本地转发 ssh -L xxxx:y.y.y.y:zzzz ssh_user@ssh_server 在ssh client 执行以上命令,交互流程如下： 1.client 监听xxxx ，连接ssh_server 2.本地或者其他host 连接xxxx ，client 与server的ssh TCP连接上增加1个 channel , 该channel 的流量 目的地址是 y.y.y.y:zzzz 3.ssh server 连接y.y.y.y:zzzz ,通过2中channel 转发给client
+场景 client 被出口限制访问一些外网服务， 可以通过ssh server 转发 防止被出口设备检测阻断
+远程转发 ssh -R xxxx:y.y.y.y:zzzz ssh_user@ssh_server 与本地转发差别在于ssh server 会监听xxxx 端口，并请求client 访问y.y.y.y:zzzz .
+场景 可用于穿越内网。 主机a,主机c NAT A&amp;mdash;&amp;mdash;&amp;ndash;公网SERVER&amp;mdash;&amp;mdash;&amp;mdash;NAT B, 主机b
+目的： 在b 上ssh 连接到主机a( 可以是NAT A 后的任意主机 ) 条件: a ,b 允许访问公网SERVER 步骤 : 1.</description>
+    </item>
     
     <item>
       <title>django   StreamingHttpResponse  分析</title>

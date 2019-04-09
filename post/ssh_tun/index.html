@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.51" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ssh  port forward &middot; jsh</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="jsh" />
+
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://joshua0x.github.io/josh.github.io/"><h1>jsh</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://joshua0x.github.io/josh.github.io/">Home</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>ssh  port forward</h1>
+  <time datetime=2019-04-09T19:56:28&#43;0800 class="post-date">Tue, Apr 9, 2019</time>
+  
+
+<p>#ssh 端口转发
+通常将ssh用于远程登陆获得shell，替代telnet，以加密通信流量。ssh的端口转发可以将其他TCP PORT 的流量通过 ssh 通道传输，以保护Telnet，SMTP，LDAP等明文协议。
+#原理</p>
+
+<h2 id="本地转发">本地转发</h2>
+
+<p>ssh   -L   xxxx:y.y.y.y:zzzz   ssh_user@ssh_server
+在ssh client  执行以上命令,交互流程如下：
+1.client  监听xxxx  ，连接ssh_server
+2.本地或者其他host 连接xxxx ，client 与server的ssh  TCP连接上增加1个 channel ,
+该channel 的流量 目的地址是 y.y.y.y:zzzz
+3.ssh server 连接y.y.y.y:zzzz ,通过2中channel 转发给client</p>
+
+<h3 id="场景">场景</h3>
+
+<p>client 被出口限制访问一些外网服务， 可以通过ssh server 转发 防止被出口设备检测阻断</p>
+
+<h2 id="远程转发">远程转发</h2>
+
+<p>ssh   -R   xxxx:y.y.y.y:zzzz   ssh_user@ssh_server
+与本地转发差别在于ssh server 会监听xxxx 端口，并请求client 访问y.y.y.y:zzzz .</p>
+
+<h3 id="场景-1">场景</h3>
+
+<p>可用于穿越内网。
+主机a,主机c   NAT  A&mdash;&mdash;&ndash;公网SERVER&mdash;&mdash;&mdash;NAT B,  主机b</p>
+
+<p>目的： 在b 上ssh  连接到主机a( 可以是NAT A 后的任意主机 )
+条件: a  ,b  允许访问公网SERVER
+步骤 :
+1. 在 a ：  ssh  -R   xxxx:localhost:22      ssh_user@ssh_server
+2. 在b :   ssh   ssh_user@ssh_server  获得SHELL<br />
+3.  在shell 中  ssh  -p  xxxx    user_a@localhost
+4.  b 中获取到 a 的shell</p>
+
+<p>#refs
+[0]<a href="https://www.ibm.com/developerworks/cn/linux/l-cn-sshforward/index.html">https://www.ibm.com/developerworks/cn/linux/l-cn-sshforward/index.html</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>
