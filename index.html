@@ -1,197 +1,152 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
-<head>
-  <link href="//gmpg.org/xfn/11" rel="profile">
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.51" />
-
-  
+<html lang="en-us">
+  <head>
+	<meta name="generator" content="Hugo 0.51" />
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  
+  <link rel="canonical" href="https://joshua0x.github.io/josh.github.io/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           jsh
+       
+  </title>
+  <meta name="title" content="jsh">
+    
+  
+  <link rel="stylesheet" href="/josh.github.io/font/iconfont.css">
+  <link rel="stylesheet" href="/josh.github.io/css/main.min.css">
 
-  <title>jsh</title>
 
   
-  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/print.css" media="print">
-  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/poole.css">
-  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/syntax.css">
-  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/hyde.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
-
-
+    <link href="https://joshua0x.github.io/josh.github.io/index.xml" rel="alternate" type="application/rss+xml" title="jsh" />
+    <link href="https://joshua0x.github.io/josh.github.io/index.xml" rel="feed" type="application/rss+xml" title="jsh" />
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
-  <link rel="shortcut icon" href="/favicon.png">
-
   
-  <link href="https://joshua0x.github.io/josh.github.io/index.xml" rel="alternate" type="application/rss+xml" title="jsh" />
 
-  
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "url": "https://joshua0x.github.io/josh.github.io/",
+    "name": "jsh",
+    "author": {
+        "@type": "Person",
+        "name": ""
+    },
+    "description": "",
+}
+</script>
+ 
+
 </head>
 
-  <body class=" ">
-  <aside class="sidebar">
-  <div class="container sidebar-sticky">
-    <div class="sidebar-about">
-      <a href="https://joshua0x.github.io/josh.github.io/"><h1>jsh</h1></a>
-      <p class="lead">
-      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
-      </p>
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://joshua0x.github.io/josh.github.io/">jsh</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+        </div>
     </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://joshua0x.github.io/josh.github.io/">jsh</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+  
+  	<div class="intro">
+    
+    
+    
+    <div class="social-links">
+      
 
-    <nav>
-      <ul class="sidebar-nav">
-        <li><a href="https://joshua0x.github.io/josh.github.io/">Home</a> </li>
-        
-      </ul>
-    </nav>
 
-    <p>&copy; 2019. All rights reserved. </p>
-  </div>
-</aside>
+ 
 
-    <main class="content container">
-    <div class="posts">
-<article class="post">
-  <h1 class="post-title">
-    <a href="https://joshua0x.github.io/josh.github.io/post/nat/">Nat穿透原理</a>
-  </h1>
-  <time datetime="2019-07-03T10:23:36&#43;0800" class="post-date">Wed, Jul 3, 2019</time>
-  简单的锥形NAT UDP 打洞验证 NAT TYPE CONE NAT 从同一个内部地址和端口出来的包，NAT关联规则中的外部源IP/PORT 保持不变. 分为3类 ： 1) 全锥形NAT（Full Cone NAT） 在一个新会话建立了公网/内网端口绑定之后，全锥形NAT接下来会接受对应公网端口的所有数据，无论是来自哪个IP。
-2) 受限锥形NAT（Restricted Cone NAT） 只会转发符合某个条件的输入数据包。条件为：外部（源）IP地址匹配内网主机之前发送一个或多个数据包的结点的IP地址。
-3) 端口受限锥形NAT（Port-Restricted Cone NAT） 端口受限锥形NAT也类似，只当外部数据包的IP地址和端口号都匹配内网主机发送过的地址和端口号时才进行转发。 端口受限锥形NAT为内部结点提供了和对称NAT相同等级的保护，以隔离未关联的数据。
-Symmetric Nat 从同一个内部地址和端口出来，是 到另一个外部目标地址和端口，则NAT将使用不同的映射，转换成不同的端口. 同时 NAT设备在收到外部报文时，还需要按照端口受限CONE NAT 相同规则来决定是否转发到内部机器 。
-NAT 类型检测 参考STUN 协议 （RFC3489），完成测试需要2个公网IP 用来检测是否是对称NAT。可以自己搭建，也有一些公开的STUN SERVER，例如stun.ideasip.com。
-demo demo 地址 : https://github.com/joshua0x/nat_traversal
-参考 [0]https://www.ietf.org/rfc/rfc3489.txt [1]https://github.com/pannzh/P2P-Over-MiddleBoxes-Demo [2]https://gist.github.com/koenbollen/464613 [3]https://www.zhihu.com/question/20436734 [4]http://www.h3c.com.cn/MiniSite/Technology_Circle/Net_Reptile/The_Five/Home/Catalog/201206/747037_97665_0.htm
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://joshua0x.github.io/josh.github.io/post/ssh_tun/">ssh  port forward</a>
-  </h1>
-  <time datetime="2019-04-09T19:56:28&#43;0800" class="post-date">Tue, Apr 9, 2019</time>
-  ssh 端口转发 通常将ssh用于远程登陆获得shell，替代telnet，以加密通信流量。ssh的端口转发可以将其他TCP PORT 的流量通过 ssh 通道传输，以保护Telnet，SMTP，LDAP等明文协议。
-原理 本地转发 ssh -L xxxx:y.y.y.y:zzzz ssh_user@ssh_server
-在ssh client 执行以上命令,交互流程如下：
-1.client 监听xxxx ，连接ssh_server
-2.本地或者其他host 连接xxxx ，client 与server的ssh TCP连接上增加1个 channel , 该channel 的流量 目的地址是 y.y.y.y:zzzz
-3.ssh server 连接y.y.y.y:zzzz ,通过2中channel 转发给client
-场景 client 被出口限制访问一些外网服务， 可以通过ssh server 转发 防止被出口设备检测阻断
-远程转发 ssh -R xxxx:y.y.y.y:zzzz ssh_user@ssh_server 与本地转发差别在于ssh server 会监听xxxx 端口，并请求client 访问y.y.y.y:zzzz .
-场景 可用于穿越内网。 主机a,主机c NAT A&mdash;&mdash;&ndash;公网SERVER&mdash;&mdash;&mdash;NAT B, 主机b
-目的： 在b 上ssh 连接到主机a( 可以是NAT A 后的任意主机 )
-条件: a ,b 允许访问公网SERVER
-  
-  <div class="read-more-link">
-    <a href="/josh.github.io/post/ssh_tun/">Read More…</a>
-  </div>
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://joshua0x.github.io/josh.github.io/post/stream_io_wsgi/">django   StreamingHttpResponse  分析</a>
-  </h1>
-  <time datetime="2019-02-27T20:03:05&#43;0800" class="post-date">Wed, Feb 27, 2019</time>
-  应用场景 在客户端从服务器下载大文件时, 可以逐步从硬盘加载文件内容到内存，并立即传输至对端， StreamingHttpResponse 实现了这种功能
-服务端框架 apache2.4 mod_wsgi django1.8
-源码阅读 类定义如下,在应用中生成器实例初始化得到StreamingHttpResponse实例,返回给mod_wsgi
- def file_iterator(file_name, chunk_size=512): with open(file_name) as f: while True: c = f.read(chunk_size) if c: yield c else: break response = StreamingHttpResponse(file_iterator(the_file_name))  以上是一种典型的用法
- class StreamingHttpResponse(HttpResponseBase): &quot;&quot;&quot; A streaming HTTP response class with an iterator as content. This should only be iterated once, when the response is streamed to the client. However, it can be appended to or replaced with a new iterator that wraps the original content (or yields entirely new content).
-  
-  <div class="read-more-link">
-    <a href="/josh.github.io/post/stream_io_wsgi/">Read More…</a>
-  </div>
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://joshua0x.github.io/josh.github.io/post/recovery_proc_ctl/">恢复丢失进程的控制</a>
-  </h1>
-  <time datetime="2019-02-25T21:28:46&#43;0800" class="post-date">Mon, Feb 25, 2019</time>
-  0 偶尔看到小四的 一篇文章，描述“远程SHELL中进程因TCP连接中断而失去控制的预防及救急方案”[ref1].
-原始问题如下： “在一个SSH会话里执行vi，后因TCP连接中断而失去控制。重新登录后发现原SSH会话对应的伪终端还在，其中的vi进程也在。有什么办法重新获取对vi的控制？ ”
-这个问题还挺有趣 ，从自己的角度复现研究下
-psuedo terminal linux 下终端包括硬件终端，伪终端。psuedo terminal 用途是作为某些程序（GUI,文本编辑）与输入输出设备的数据传输。 通过ssh,telnet 登陆后会话的控制终端一般为/dev/pts/$1 ,不同的会话一般生成不同的pseudo terminal .
-readlink -f '/proc/15063/fd/0' /dev/pts/1  不同的应用程序可以输出至相同的伪终端
-如何恢复呢 [ref1]中给出的脚本如下：
-#!/bin/sh function usage() { echo usage: $0 pid exit 1 } TCGETS=0x5401 TCSETS=0x5402 SIZEOF_STRUCT_TERMIOS=60 O_RDWR=2 ((FLAGS=O_RDWR)) PID=$1 if [ x`which gdb` == x ]; then echo gdb not found in PATH. Please apt-get install gdb exit fi if [ x$PID == x ]; then usage; fi if [ x$2 !
-  
-  <div class="read-more-link">
-    <a href="/josh.github.io/post/recovery_proc_ctl/">Read More…</a>
-  </div>
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://joshua0x.github.io/josh.github.io/post/auth_middle/">django 持久回话</a>
-  </h1>
-  <time datetime="2019-01-12T16:31:47&#43;0800" class="post-date">Sat, Jan 12, 2019</time>
-   SessionMiddleware AuthenticationMiddleware 完成持久会话 按照如下流程完成认证与持久会话,其中authenticate、login 是contrib/auth 中的函數
-1.authenticate 输入 认证信息 输出 user 对象
-2.login 2.1 将user id 写入 SESSION 2.2 在执行sessionMiddleWare process_response 函数时 检测到session 变更 ，执行持久化
-3.authmiddleware 完成認證后下次WEB請求到達時 , authmiddleware 依賴于sessionMiddleware, 在settings.py 中配置時出現在後面。
-3.1 sessionMiddleware 反序列化出sessionData
-3.2 authMiddleWare 從sessionData取出userid 生成user對象
-4. 登出 clear session data
-版本django 1.8 
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://joshua0x.github.io/josh.github.io/post/py_unicode/">py_unicode</a>
-  </h1>
-  <time datetime="2019-01-12T16:31:47&#43;0800" class="post-date">Sat, Jan 12, 2019</time>
-  Unicode UTF8 Unicode 是字符集 UTF8 是变长编码规则
-py2 python2 中，string、UNICODE 是内置类型. string 为 按照特定编码规则编码后的字节串，UNICODE 为按照UCS-2或者UCS-4编码的UNICODE 码点(code point) STRING 在2种编码规则好间转换需要经过UNICODE 中转
-输出至shell 在Linux下 可以直接print unicode, string 在输出 unicode对象， 应该会获取sys.stdout 的编码规则属性进行编码然后输出
-py3 只有string 类型 ，底层存储类似于PYTHON2 中的UNICODE TYPE ,所以无decode方法,通过encode方法转换编码
-ref https://downloads.egenix.com/python/Unicode-EPC2002-Talk.pdf https://blog.csdn.net/u014591781/article/details/78415044
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://joshua0x.github.io/josh.github.io/post/django_orm_migration/">Django_orm_migration</a>
-  </h1>
-  <time datetime="2019-01-06T14:26:53&#43;0800" class="post-date">Sun, Jan 6, 2019</time>
-  django orm migrate 流程 执行 python manage.py makemigrations app_name 1.依据当前app 的migrations 文件的 依赖关系 构建 修改model.py 前的数据表结构 2.扫描当前model.py 生成表结构 与 步骤1 中 做 diff 操作 生成migrations 文件
-执行 python manage.py migrate  检查表 django_migrations 中 各个migrations 文件是否执行 ， 执行未执行的文件  ##ref https://reinout.vanrees.org/weblog/2014/11/14/2migrations.html
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://joshua0x.github.io/josh.github.io/post/django_wsgi/">Django_wsgi</a>
-  </h1>
-  <time datetime="2019-01-06T13:40:49&#43;0800" class="post-date">Sun, Jan 6, 2019</time>
-  DJANGO 线程安全 在项目中 基于 APACHE DJANGO 搭建WEB 服务. DJANGO APACHE 间基于WSGI协议通信。mod_wsgi 模块以daemon-mode 运行 ，APACHE 进程与 mod_wsgi 进程 通过UNIX SOCKET 通信。在daemon-mode 下 ，可以配置进程 与线程数目，对于每个进程会启动一个python interpreter ,其会生成1个wsgiHandler
-apache conf 如下： WSGIScriptAlias / &ldquo;YOUR_PATH/wsgi.py&rdquo; WSGIDaemonProcess 10.67.20.1 processes=2 threads=15 WSGIProcessGroup 10.67.20.1 Order Deny,Allow Allow from all 
-python GIL cpython，在调度执行多线程代码时 ，每个线程执行前需要获取锁，但是GIL的存在并不能使得python 多线程在操作共享变量时达到线程安全的效果。由于python下的单行语句编译得到字节码后可能是多条指令 ，指令间可能发生线程调度。 考虑如下代码：
-import threading import time zero = 0 def change_zero(): global zero for i in range(3000000): zero += 1 #23 zero -= 1 #24 th1 = threading.
-  
-  <div class="read-more-link">
-    <a href="/josh.github.io/post/django_wsgi/">Read More…</a>
-  </div>
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://joshua0x.github.io/josh.github.io/post/logging_safety/">python logging  安全</a>
-  </h1>
-  <time datetime="2019-01-06T13:40:49&#43;0800" class="post-date">Sun, Jan 6, 2019</time>
-  线程安全 测试 按照官方doc , 在多线程环境下访问模块shared data object ,以及handler写入文件系统时都通过加锁保证原子写入
-在进程内多个相同参数调用 logging.getLogger 会返回同1个对象
-可以用 如下 代码测试 ， 注意由于imported modules 是进程级别的, 下面的多线程环境重复IMPORT 不会导致重复IMPORT
-import threading import time def worker(): import logging as lg k = lg.getLogger('a') print id(lg),id(k) print '\n' t = threading.Thread(target = worker) t.start() t = threading.Thread(target = worker) t.start()  源码分析 为保证线程安全 , 源码中 主要通过 threading.Rlock 保护 2类 对象:
-a. module level object
-b. 文件IO
-多进程写日志 通过logging filehandler , 多进程环境下写入相同的日志文件 是安全的吗？
-  
-  <div class="read-more-link">
-    <a href="/josh.github.io/post/logging_safety/">Read More…</a>
-  </div>
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://joshua0x.github.io/josh.github.io/post/django_thread_safe/"></a>
-  </h1>
-  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
-  #部署环境 #测试 ##a ##b
-  
-</article>
+
+
+
+
+
+
+    </div>
 </div>
-    </main>
+
+
+ 
+
+
+  
+
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
 
     
+    <script src="/josh.github.io/js/vendor_main.min.js" async=""></script>
+
+
+
+     </div>
   </body>
 </html>

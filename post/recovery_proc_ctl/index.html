@@ -1,59 +1,138 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
-<head>
-  <link href="//gmpg.org/xfn/11" rel="profile">
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.51" />
-
-  
+<html lang="en-us">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  <link rel="prev" href="https://joshua0x.github.io/josh.github.io/post/auth_middle/" />
+  <link rel="next" href="https://joshua0x.github.io/josh.github.io/post/stream_io_wsgi/" />
+  <link rel="canonical" href="https://joshua0x.github.io/josh.github.io/post/recovery_proc_ctl/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           恢复丢失进程的控制 | jsh
+       
+  </title>
+  <meta name="title" content="恢复丢失进程的控制 | jsh">
+    
+  
+  <link rel="stylesheet" href="/josh.github.io/font/iconfont.css">
+  <link rel="stylesheet" href="/josh.github.io/css/main.min.css">
 
-  <title>恢复丢失进程的控制 &middot; jsh</title>
 
   
-  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/print.css" media="print">
-  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/poole.css">
-  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/syntax.css">
-  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/hyde.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
-
-
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
-  <link rel="shortcut icon" href="/favicon.png">
+ 
 
-  
-  <link href="" rel="alternate" type="application/rss+xml" title="jsh" />
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https://joshua0x.github.io/josh.github.io/"
+    },
+    "articleSection" : "post",
+    "name" : "恢复丢失进程的控制",
+    "headline" : "恢复丢失进程的控制",
+    "description" : "0 偶尔看到小四的 一篇文章，描述“远程SHELL中进程因TCP连接中断而失去控制的预防及救急方案”[ref1].
+原始问题如下： “在一个SSH会话里执行vi，后因TCP连接中断而失去控制。重新登录后发现原SSH会话对应的伪终端还在，其中的vi进程也在。有什么办法重新获取对vi的控制？ ”
+这个问题还挺有趣 ，从自己的角度复现研究下
+psuedo terminal linux 下终端包括硬件终端，伪终端。psuedo terminal 用途是作为某些程序（GUI,文本编辑）与输入输出设备的数据传输。 通过ssh,telnet 登陆后会话的控制终端一般为/dev/pts/$1 ,不同的会话一般生成不同的pseudo terminal .
+readlink -f '/proc/15063/fd/0' /dev/pts/1  不同的应用程序可以输出至相同的伪终端
+如何恢复呢 [ref1]中给出的脚本如下：
+#!/bin/sh function usage() { echo usage: $0 pid exit 1 } TCGETS=0x5401 TCSETS=0x5402 SIZEOF_STRUCT_TERMIOS=60 O_RDWR=2 ((FLAGS=O_RDWR)) PID=$1 if [ x`which gdb` == x ]; then echo gdb not found in PATH. Please apt-get install gdb exit fi if [ x$PID == x ]; then usage; fi if [ x$2 !",
+    "inLanguage" : "en-us",
+    "author" : "",
+    "creator" : "",
+    "publisher": "",
+    "accountablePerson" : "",
+    "copyrightHolder" : "",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-02-25 21:28:46 &#43;0800 CST",
+    "dateModified" : "2019-02-25 21:28:46 &#43;0800 CST",
+    "url" : "https://joshua0x.github.io/josh.github.io/post/recovery_proc_ctl/",
+    "wordCount" : "203",
+    "keywords" : [  "jsh"]
+}
+</script>
 
-  
 </head>
 
-  <body class=" ">
-  <aside class="sidebar">
-  <div class="container sidebar-sticky">
-    <div class="sidebar-about">
-      <a href="https://joshua0x.github.io/josh.github.io/"><h1>jsh</h1></a>
-      <p class="lead">
-      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
-      </p>
-    </div>
-
-    <nav>
-      <ul class="sidebar-nav">
-        <li><a href="https://joshua0x.github.io/josh.github.io/">Home</a> </li>
-        
-      </ul>
-    </nav>
-
-    <p>&copy; 2019. All rights reserved. </p>
-  </div>
-</aside>
-
-    <main class="content container">
-    <div class="post">
-  <h1>恢复丢失进程的控制</h1>
-  <time datetime=2019-02-25T21:28:46&#43;0800 class="post-date">Mon, Feb 25, 2019</time>
   
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://joshua0x.github.io/josh.github.io/">jsh</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://joshua0x.github.io/josh.github.io/">jsh</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">恢复丢失进程的控制</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://joshua0x.github.io/josh.github.io/" rel="author"></a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-02-25 itemprop="datePublished">February 25, 2019</time>
+                </span>
+                in
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
 
 <h1 id="0">0</h1>
 
@@ -163,11 +242,79 @@ gdb涉及程序的编译、链接、动态加载,还有待深入学习。</p>
 
 <p>[2]<a href="https://eli.thegreenplace.net/2011/02/07/how-debuggers-work-part-3-debugging-information#id8">https://eli.thegreenplace.net/2011/02/07/how-debuggers-work-part-3-debugging-information#id8</a></p>
 
-</div>
+    </div>
+
+    <div class="post-copyright">
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://joshua0x.github.io/josh.github.io/post/recovery_proc_ctl/>https://joshua0x.github.io/josh.github.io/post/recovery_proc_ctl/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://joshua0x.github.io/josh.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://joshua0x.github.io/josh.github.io/post/auth_middle/" class="prev" rel="prev" title="django 持久回话"><i class="iconfont icon-left"></i>&nbsp;django 持久回话</a>
+         
+        
+        <a href="https://joshua0x.github.io/josh.github.io/post/stream_io_wsgi/" class="next" rel="next" title="django   StreamingHttpResponse  分析">django   StreamingHttpResponse  分析&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
 
 
-    </main>
+
+
+
+
+
+
+
+
+
 
     
+    
+    <script src="/josh.github.io/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
   </body>
 </html>

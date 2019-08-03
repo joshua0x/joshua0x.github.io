@@ -1,59 +1,135 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
-<head>
-  <link href="//gmpg.org/xfn/11" rel="profile">
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.51" />
-
-  
+<html lang="en-us">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  <link rel="prev" href="https://joshua0x.github.io/josh.github.io/post/logging_safety/" />
+  <link rel="next" href="https://joshua0x.github.io/josh.github.io/post/django_orm_migration/" />
+  <link rel="canonical" href="https://joshua0x.github.io/josh.github.io/post/django_wsgi/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           Django_wsgi | jsh
+       
+  </title>
+  <meta name="title" content="Django_wsgi | jsh">
+    
+  
+  <link rel="stylesheet" href="/josh.github.io/font/iconfont.css">
+  <link rel="stylesheet" href="/josh.github.io/css/main.min.css">
 
-  <title>Django_wsgi &middot; jsh</title>
 
   
-  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/print.css" media="print">
-  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/poole.css">
-  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/syntax.css">
-  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/hyde.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
-
-
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
-  <link rel="shortcut icon" href="/favicon.png">
+ 
 
-  
-  <link href="" rel="alternate" type="application/rss+xml" title="jsh" />
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https://joshua0x.github.io/josh.github.io/"
+    },
+    "articleSection" : "post",
+    "name" : "Django_wsgi",
+    "headline" : "Django_wsgi",
+    "description" : "DJANGO 线程安全 在项目中 基于 APACHE DJANGO 搭建WEB 服务. DJANGO APACHE 间基于WSGI协议通信。mod_wsgi 模块以daemon-mode 运行 ，APACHE 进程与 mod_wsgi 进程 通过UNIX SOCKET 通信。在daemon-mode 下 ，可以配置进程 与线程数目，对于每个进程会启动一个python interpreter ,其会生成1个wsgiHandler
+apache conf 如下： WSGIScriptAlias / &ldquo;YOUR_PATH/wsgi.py&rdquo; WSGIDaemonProcess 10.67.20.1 processes=2 threads=15 WSGIProcessGroup 10.67.20.1 Order Deny,Allow Allow from all 
+python GIL cpython，在调度执行多线程代码时 ，每个线程执行前需要获取锁，但是GIL的存在并不能使得python 多线程在操作共享变量时达到线程安全的效果。由于python下的单行语句编译得到字节码后可能是多条指令 ，指令间可能发生线程调度。 考虑如下代码：
+import threading import time zero = 0 def change_zero(): global zero for i in range(3000000): zero += 1 #23 zero -= 1 #24 th1 = threading.",
+    "inLanguage" : "en-us",
+    "author" : "",
+    "creator" : "",
+    "publisher": "",
+    "accountablePerson" : "",
+    "copyrightHolder" : "",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-01-06 13:40:49 &#43;0800 CST",
+    "dateModified" : "2019-01-06 13:40:49 &#43;0800 CST",
+    "url" : "https://joshua0x.github.io/josh.github.io/post/django_wsgi/",
+    "wordCount" : "108",
+    "keywords" : [  "jsh"]
+}
+</script>
 
-  
 </head>
 
-  <body class=" ">
-  <aside class="sidebar">
-  <div class="container sidebar-sticky">
-    <div class="sidebar-about">
-      <a href="https://joshua0x.github.io/josh.github.io/"><h1>jsh</h1></a>
-      <p class="lead">
-      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
-      </p>
-    </div>
-
-    <nav>
-      <ul class="sidebar-nav">
-        <li><a href="https://joshua0x.github.io/josh.github.io/">Home</a> </li>
-        
-      </ul>
-    </nav>
-
-    <p>&copy; 2019. All rights reserved. </p>
-  </div>
-</aside>
-
-    <main class="content container">
-    <div class="post">
-  <h1>Django_wsgi</h1>
-  <time datetime=2019-01-06T13:40:49&#43;0800 class="post-date">Sun, Jan 6, 2019</time>
   
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://joshua0x.github.io/josh.github.io/">jsh</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://joshua0x.github.io/josh.github.io/">jsh</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Django_wsgi</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://joshua0x.github.io/josh.github.io/" rel="author"></a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-01-06 itemprop="datePublished">January 6, 2019</time>
+                </span>
+                in
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
 
 <h1 id="django-线程安全">DJANGO 线程安全</h1>
 
@@ -101,11 +177,79 @@ DJANGO  代码 一般包含 view  model 层，由于单个进程  包含多个�
 通过线程安全的logging 模块记录结果，可以验证。
 </code></pre>
 
-</div>
+    </div>
+
+    <div class="post-copyright">
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://joshua0x.github.io/josh.github.io/post/django_wsgi/>https://joshua0x.github.io/josh.github.io/post/django_wsgi/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://joshua0x.github.io/josh.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://joshua0x.github.io/josh.github.io/post/logging_safety/" class="prev" rel="prev" title="python logging  安全"><i class="iconfont icon-left"></i>&nbsp;python logging  安全</a>
+         
+        
+        <a href="https://joshua0x.github.io/josh.github.io/post/django_orm_migration/" class="next" rel="next" title="Django_orm_migration">Django_orm_migration&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
 
 
-    </main>
+
+
+
+
+
+
+
+
+
 
     
+    
+    <script src="/josh.github.io/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
   </body>
 </html>
