@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.51" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nat &middot; jsh</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="jsh" />
+
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://joshua0x.github.io/josh.github.io/"><h1>jsh</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://joshua0x.github.io/josh.github.io/">Home</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nat</h1>
+  <time datetime=2019-07-03T10:23:36&#43;0800 class="post-date">Wed, Jul 3, 2019</time>
+  
+
+<h1 id="简单的锥形nat-udp-打洞验证">简单的锥形NAT   UDP 打洞验证</h1>
+
+<h2 id="nat-type">NAT TYPE</h2>
+
+<h3 id="cone-nat">CONE NAT</h3>
+
+<p>从同一个内部地址和端口出来的包，NAT关联规则中的外部源IP/PORT  保持不变.
+分为3类 ：
+1) 全锥形NAT（Full Cone NAT） 在一个新会话建立了公网/内网端口绑定之后，全锥形NAT接下来会接受对应公网端口的所有数据，无论是来自哪个IP。
+2) 受限锥形NAT（Restricted Cone NAT） 只会转发符合某个条件的输入数据包。条件为：外部（源）IP地址匹配内网主机之前发送一个或多个数据包的结点的IP地址。
+3) 端口受限锥形NAT（Port-Restricted Cone NAT） 端口受限锥形NAT也类似，只当外部数据包的IP地址和端口号都匹配内网主机发送过的地址和端口号时才进行转发。 端口受限锥形NAT为内部结点提供了和对称NAT相同等级的保护，以隔离未关联的数据。</p>
+
+<h3 id="symmetric-nat">Symmetric Nat</h3>
+
+<p>从同一个内部地址和端口出来，是 到另一个外部目标地址和端口，则NAT将使用不同的映射，转换成不同的端口. 同时 NAT设备在收到外部报文时，还需要按照端口受限CONE NAT 相同规则来决定是否转发到内部机器 。</p>
+
+<h3 id="nat-类型检测">NAT  类型检测</h3>
+
+<p>参考STUN 协议 （RFC3489），完成测试需要2个公网IP 用来检测是否是对称NAT。可以自己搭建，也有一些公开的STUN SERVER，例如stun.ideasip.com。</p>
+
+<h2 id="demo">demo</h2>
+
+<p>demo 地址 :  <a href="https://github.com/joshua0x/nat_traversal">https://github.com/joshua0x/nat_traversal</a></p>
+
+<h2 id="参考">参考</h2>
+
+<p>[0]<a href="https://www.ietf.org/rfc/rfc3489.txt">https://www.ietf.org/rfc/rfc3489.txt</a>
+[1]<a href="https://github.com/pannzh/P2P-Over-MiddleBoxes-Demo">https://github.com/pannzh/P2P-Over-MiddleBoxes-Demo</a>
+[2]<a href="https://gist.github.com/koenbollen/464613">https://gist.github.com/koenbollen/464613</a>
+[3]<a href="https://www.zhihu.com/question/20436734">https://www.zhihu.com/question/20436734</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

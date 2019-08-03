@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://joshua0x.github.io/josh.github.io/post/nat/</loc>
+    <lastmod>2019-07-03T10:23:36+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://joshua0x.github.io/josh.github.io/post/ssh_tun/</loc>
     <lastmod>2019-04-09T19:56:28+08:00</lastmod>
   </url>
@@ -53,7 +58,7 @@
   
   <url>
     <loc>https://joshua0x.github.io/josh.github.io/post/</loc>
-    <lastmod>2019-04-09T19:56:28+08:00</lastmod>
+    <lastmod>2019-07-03T10:23:36+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -64,7 +69,7 @@
   
   <url>
     <loc>https://joshua0x.github.io/josh.github.io/</loc>
-    <lastmod>2019-04-09T19:56:28+08:00</lastmod>
+    <lastmod>2019-07-03T10:23:36+08:00</lastmod>
     <priority>0</priority>
   </url>
   
