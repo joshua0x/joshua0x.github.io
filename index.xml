@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>jsh on jsh</title>
+    <title>jsh</title>
     <link>https://joshua0x.github.io/josh.github.io/</link>
-    <description>Recent content in jsh on jsh</description>
+    <description>Recent content on jsh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 03 Jul 2019 10:23:36 +0800</lastBuildDate>
-    <atom:link href="/josh.github.io/" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://joshua0x.github.io/josh.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Nat穿透原理</title>
@@ -15,42 +17,13 @@
       <pubDate>Wed, 03 Jul 2019 10:23:36 +0800</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/nat/</guid>
-      <description>
-
-&lt;h1 id=&#34;简单的锥形nat-udp-打洞验证&#34;&gt;简单的锥形NAT   UDP 打洞验证&lt;/h1&gt;
-
-&lt;h2 id=&#34;nat-type&#34;&gt;NAT TYPE&lt;/h2&gt;
-
-&lt;h3 id=&#34;cone-nat&#34;&gt;CONE NAT&lt;/h3&gt;
-
-&lt;p&gt;从同一个内部地址和端口出来的包，NAT关联规则中的外部源IP/PORT  保持不变.
-分为3类 ：
-1) 全锥形NAT（Full Cone NAT） 在一个新会话建立了公网/内网端口绑定之后，全锥形NAT接下来会接受对应公网端口的所有数据，无论是来自哪个IP。&lt;/p&gt;
-
-&lt;p&gt;2) 受限锥形NAT（Restricted Cone NAT） 只会转发符合某个条件的输入数据包。条件为：外部（源）IP地址匹配内网主机之前发送一个或多个数据包的结点的IP地址。&lt;/p&gt;
-
-&lt;p&gt;3) 端口受限锥形NAT（Port-Restricted Cone NAT） 端口受限锥形NAT也类似，只当外部数据包的IP地址和端口号都匹配内网主机发送过的地址和端口号时才进行转发。 端口受限锥形NAT为内部结点提供了和对称NAT相同等级的保护，以隔离未关联的数据。&lt;/p&gt;
-
-&lt;h3 id=&#34;symmetric-nat&#34;&gt;Symmetric Nat&lt;/h3&gt;
-
-&lt;p&gt;从同一个内部地址和端口出来，是 到另一个外部目标地址和端口，则NAT将使用不同的映射，转换成不同的端口. 同时 NAT设备在收到外部报文时，还需要按照端口受限CONE NAT 相同规则来决定是否转发到内部机器 。&lt;/p&gt;
-
-&lt;h3 id=&#34;nat-类型检测&#34;&gt;NAT  类型检测&lt;/h3&gt;
-
-&lt;p&gt;参考STUN 协议 （RFC3489），完成测试需要2个公网IP 用来检测是否是对称NAT。可以自己搭建，也有一些公开的STUN SERVER，例如stun.ideasip.com。&lt;/p&gt;
-
-&lt;h2 id=&#34;demo&#34;&gt;demo&lt;/h2&gt;
-
-&lt;p&gt;demo 地址 :  &lt;a href=&#34;https://github.com/joshua0x/nat_traversal&#34;&gt;https://github.com/joshua0x/nat_traversal&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
-
-&lt;p&gt;[0]&lt;a href=&#34;https://www.ietf.org/rfc/rfc3489.txt&#34;&gt;https://www.ietf.org/rfc/rfc3489.txt&lt;/a&gt;
-[1]&lt;a href=&#34;https://github.com/pannzh/P2P-Over-MiddleBoxes-Demo&#34;&gt;https://github.com/pannzh/P2P-Over-MiddleBoxes-Demo&lt;/a&gt;
-[2]&lt;a href=&#34;https://gist.github.com/koenbollen/464613&#34;&gt;https://gist.github.com/koenbollen/464613&lt;/a&gt;
-[3]&lt;a href=&#34;https://www.zhihu.com/question/20436734&#34;&gt;https://www.zhihu.com/question/20436734&lt;/a&gt;
-[4]&lt;a href=&#34;http://www.h3c.com.cn/MiniSite/Technology_Circle/Net_Reptile/The_Five/Home/Catalog/201206/747037_97665_0.htm&#34;&gt;http://www.h3c.com.cn/MiniSite/Technology_Circle/Net_Reptile/The_Five/Home/Catalog/201206/747037_97665_0.htm&lt;/a&gt;&lt;/p&gt;
-</description>
+      <description>简单的锥形NAT UDP 打洞验证 NAT TYPE CONE NAT 从同一个内部地址和端口出来的包，NAT关联规则中的外部源IP/PORT 保持不变. 分为3类 ： 1) 全锥形NAT（Full Cone NAT） 在一个新会话建立了公网/内网端口绑定之后，全锥形NAT接下来会接受对应公网端口的所有数据，无论是来自哪个IP。
+2) 受限锥形NAT（Restricted Cone NAT） 只会转发符合某个条件的输入数据包。条件为：外部（源）IP地址匹配内网主机之前发送一个或多个数据包的结点的IP地址。
+3) 端口受限锥形NAT（Port-Restricted Cone NAT） 端口受限锥形NAT也类似，只当外部数据包的IP地址和端口号都匹配内网主机发送过的地址和端口号时才进行转发。 端口受限锥形NAT为内部结点提供了和对称NAT相同等级的保护，以隔离未关联的数据。
+Symmetric Nat 从同一个内部地址和端口出来，是 到另一个外部目标地址和端口，则NAT将使用不同的映射，转换成不同的端口. 同时 NAT设备在收到外部报文时，还需要按照端口受限CONE NAT 相同规则来决定是否转发到内部机器 。
+NAT 类型检测 参考STUN 协议 （RFC3489），完成测试需要2个公网IP 用来检测是否是对称NAT。可以自己搭建，也有一些公开的STUN SERVER，例如stun.ideasip.com。
+demo demo 地址 : https://github.com/joshua0x/nat_traversal
+参考 [0]https://www.ietf.org/rfc/rfc3489.txt [1]https://github.com/pannzh/P2P-Over-MiddleBoxes-Demo [2]https://gist.github.com/koenbollen/464613 [3]https://www.zhihu.com/question/20436734 [4]http://www.h3c.com.cn/MiniSite/Technology_Circle/Net_Reptile/The_Five/Home/Catalog/201206/747037_97665_0.htm</description>
     </item>
     
     <item>
@@ -59,60 +32,17 @@
       <pubDate>Tue, 09 Apr 2019 19:56:28 +0800</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/ssh_tun/</guid>
-      <description>
-
-&lt;h1 id=&#34;ssh-端口转发&#34;&gt;ssh 端口转发&lt;/h1&gt;
-
-&lt;p&gt;通常将ssh用于远程登陆获得shell，替代telnet，以加密通信流量。ssh的端口转发可以将其他TCP PORT 的流量通过 ssh 通道传输，以保护Telnet，SMTP，LDAP等明文协议。&lt;/p&gt;
-
-&lt;h1 id=&#34;原理&#34;&gt;原理&lt;/h1&gt;
-
-&lt;h2 id=&#34;本地转发&#34;&gt;本地转发&lt;/h2&gt;
-
-&lt;p&gt;ssh   -L   xxxx:y.y.y.y:zzzz   ssh_user@ssh_server&lt;/p&gt;
-
-&lt;p&gt;在ssh client  执行以上命令,交互流程如下：&lt;/p&gt;
-
-&lt;p&gt;1.client  监听xxxx  ，连接ssh_server&lt;/p&gt;
-
-&lt;p&gt;2.本地或者其他host 连接xxxx ，client 与server的ssh  TCP连接上增加1个 channel ,
-该channel 的流量 目的地址是 y.y.y.y:zzzz&lt;/p&gt;
-
-&lt;p&gt;3.ssh server 连接y.y.y.y:zzzz ,通过2中channel 转发给client&lt;/p&gt;
-
-&lt;h3 id=&#34;场景&#34;&gt;场景&lt;/h3&gt;
-
-&lt;p&gt;client 被出口限制访问一些外网服务， 可以通过ssh server 转发 防止被出口设备检测阻断&lt;/p&gt;
-
-&lt;h2 id=&#34;远程转发&#34;&gt;远程转发&lt;/h2&gt;
-
-&lt;p&gt;ssh   -R   xxxx:y.y.y.y:zzzz   ssh_user@ssh_server
-与本地转发差别在于ssh server 会监听xxxx 端口，并请求client 访问y.y.y.y:zzzz .&lt;/p&gt;
-
-&lt;h3 id=&#34;场景-1&#34;&gt;场景&lt;/h3&gt;
-
-&lt;p&gt;可用于穿越内网。
-主机a,主机c   NAT  A&amp;mdash;&amp;mdash;&amp;ndash;公网SERVER&amp;mdash;&amp;mdash;&amp;mdash;NAT B,  主机b&lt;/p&gt;
-
-&lt;p&gt;目的： 在b 上ssh  连接到主机a( 可以是NAT A 后的任意主机 )&lt;/p&gt;
-
-&lt;p&gt;条件: a  ,b  允许访问公网SERVER&lt;/p&gt;
-
-&lt;p&gt;步骤 :
-1. 在 a ：  ssh  -R   xxxx:localhost:22      ssh_user@ssh_server&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;在b :   ssh   ssh_user@ssh_server  获得SHELL&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;在shell 中  ssh  -p  xxxx    user_a@localhost&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;b 中获取到 a 的shell&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&#34;refs&#34;&gt;refs&lt;/h1&gt;
-
-&lt;p&gt;[0]&lt;a href=&#34;https://www.ibm.com/developerworks/cn/linux/l-cn-sshforward/index.html&#34;&gt;https://www.ibm.com/developerworks/cn/linux/l-cn-sshforward/index.html&lt;/a&gt;&lt;/p&gt;
-</description>
+      <description>ssh 端口转发 通常将ssh用于远程登陆获得shell，替代telnet，以加密通信流量。ssh的端口转发可以将其他TCP PORT 的流量通过 ssh 通道传输，以保护Telnet，SMTP，LDAP等明文协议。
+原理 本地转发 ssh -L xxxx:y.y.y.y:zzzz ssh_user@ssh_server
+在ssh client 执行以上命令,交互流程如下：
+1.client 监听xxxx ，连接ssh_server
+2.本地或者其他host 连接xxxx ，client 与server的ssh TCP连接上增加1个 channel , 该channel 的流量 目的地址是 y.y.y.y:zzzz
+3.ssh server 连接y.y.y.y:zzzz ,通过2中channel 转发给client
+场景 client 被出口限制访问一些外网服务， 可以通过ssh server 转发 防止被出口设备检测阻断
+远程转发 ssh -R xxxx:y.y.y.y:zzzz ssh_user@ssh_server 与本地转发差别在于ssh server 会监听xxxx 端口，并请求client 访问y.y.y.y:zzzz .
+场景 可用于穿越内网。 主机a,主机c NAT A&amp;mdash;&amp;mdash;&amp;ndash;公网SERVER&amp;mdash;&amp;mdash;&amp;mdash;NAT B, 主机b
+目的： 在b 上ssh 连接到主机a( 可以是NAT A 后的任意主机 )
+条件: a ,b 允许访问公网SERVER</description>
     </item>
     
     <item>
@@ -121,96 +51,11 @@
       <pubDate>Wed, 27 Feb 2019 20:03:05 +0800</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/stream_io_wsgi/</guid>
-      <description>
-
-&lt;h1 id=&#34;应用场景&#34;&gt;应用场景&lt;/h1&gt;
-
-&lt;p&gt;在客户端从服务器下载大文件时, 可以逐步从硬盘加载文件内容到内存，并立即传输至对端，
-StreamingHttpResponse  实现了这种功能&lt;/p&gt;
-
-&lt;h1 id=&#34;服务端框架&#34;&gt;服务端框架&lt;/h1&gt;
-
-&lt;p&gt;apache2.4  mod_wsgi    django1.8&lt;/p&gt;
-
-&lt;h1 id=&#34;源码阅读&#34;&gt;源码阅读&lt;/h1&gt;
-
-&lt;p&gt;类定义如下,在应用中生成器实例初始化得到StreamingHttpResponse实例,返回给mod_wsgi&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;
-    def file_iterator(file_name, chunk_size=512):
-        with open(file_name) as f:
-            while True:
-                c = f.read(chunk_size)
-                if c:
-                    yield c
-                else:
-                    break
-
-    response = StreamingHttpResponse(file_iterator(the_file_name))
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;以上是一种典型的用法&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;
-class StreamingHttpResponse(HttpResponseBase):
-    &amp;quot;&amp;quot;&amp;quot;
-    A streaming HTTP response class with an iterator as content.
-
-    This should only be iterated once, when the response is streamed to the
-    client. However, it can be appended to or replaced with a new iterator
-    that wraps the original content (or yields entirely new content).
-    &amp;quot;&amp;quot;&amp;quot;
-
-    streaming = True
-
-    def __init__(self, streaming_content=(), *args, **kwargs):
-        super(StreamingHttpResponse, self).__init__(*args, **kwargs)
-        # `streaming_content` should be an iterable of bytestrings.
-        # See the `streaming_content` property methods.
-        self.streaming_content = streaming_content
-
-    @property
-    def content(self):
-        raise AttributeError(&amp;quot;This %s instance has no `content` attribute. &amp;quot;
-            &amp;quot;Use `streaming_content` instead.&amp;quot; % self.__class__.__name__)
-
-    @property
-    def streaming_content(self):
-        return map(self.make_bytes, self._iterator)
-
-    @streaming_content.setter
-    def streaming_content(self, value):
-        self._set_streaming_content(value)
-
-    def _set_streaming_content(self, value):
-        # Ensure we can never iterate on &amp;quot;value&amp;quot; more than once.
-        self._iterator = iter(value)
-        if hasattr(value, &#39;close&#39;):
-            self._closable_objects.append(value)
-
-    def __iter__(self):
-        return self.streaming_content
-
-    def getvalue(self):
-        return b&#39;&#39;.join(self.streaming_content)
-
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;mod_wsgi  迭代streaming_content  获取内容  并按照chunked-transfer 组装成二进制流&lt;/p&gt;
-
-&lt;h1 id=&#34;transfer-encoding-chunked&#34;&gt;Transfer-Encoding: chunked&lt;/h1&gt;
-
-&lt;p&gt;http协议中 ，客户端判断一次HTTP response 的结束 可以通过socket 返回0  、  content-length(HTTP  header) 等方式，
-在chunked   transfer 下，  可以通过特殊格式的编码来判断1次完整的response 。详细格式定义可参考 ref1&lt;/p&gt;
-
-&lt;h1 id=&#34;refs&#34;&gt;refs&lt;/h1&gt;
-
-&lt;p&gt;[1]&lt;a href=&#34;https://imququ.com/post/transfer-encoding-header-in-http.html&#34;&gt;https://imququ.com/post/transfer-encoding-header-in-http.html&lt;/a&gt;
-[2]&lt;a href=&#34;https://andrewbrookins.com/django/how-does-djangos-streaminghttpresponse-work-exactly/&#34;&gt;https://andrewbrookins.com/django/how-does-djangos-streaminghttpresponse-work-exactly/&lt;/a&gt;
-[3]&lt;a href=&#34;https://rhodesmill.org/brandon/2013/chunked-wsgi/&#34;&gt;https://rhodesmill.org/brandon/2013/chunked-wsgi/&lt;/a&gt;&lt;/p&gt;
-</description>
+      <description>应用场景 在客户端从服务器下载大文件时, 可以逐步从硬盘加载文件内容到内存，并立即传输至对端， StreamingHttpResponse 实现了这种功能
+服务端框架 apache2.4 mod_wsgi django1.8
+源码阅读 类定义如下,在应用中生成器实例初始化得到StreamingHttpResponse实例,返回给mod_wsgi
+ def file_iterator(file_name, chunk_size=512): with open(file_name) as f: while True: c = f.read(chunk_size) if c: yield c else: break response = StreamingHttpResponse(file_iterator(the_file_name))  以上是一种典型的用法
+ class StreamingHttpResponse(HttpResponseBase): &amp;quot;&amp;quot;&amp;quot; A streaming HTTP response class with an iterator as content. This should only be iterated once, when the response is streamed to the client. However, it can be appended to or replaced with a new iterator that wraps the original content (or yields entirely new content).</description>
     </item>
     
     <item>
@@ -219,116 +64,13 @@ class StreamingHttpResponse(HttpResponseBase):
       <pubDate>Mon, 25 Feb 2019 21:28:46 +0800</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/recovery_proc_ctl/</guid>
-      <description>
-
-&lt;h1 id=&#34;0&#34;&gt;0&lt;/h1&gt;
-
-&lt;p&gt;偶尔看到小四的 一篇文章，描述“远程SHELL中进程因TCP连接中断而失去控制的预防及救急方案”[ref1].&lt;/p&gt;
-
-&lt;p&gt;原始问题如下：
-“在一个SSH会话里执行vi，后因TCP连接中断而失去控制。重新登录后发现原SSH会话对应的伪终端还在，其中的vi进程也在。有什么办法重新获取对vi的控制？
-”&lt;br /&gt;
-这个问题还挺有趣  ，从自己的角度复现研究下&lt;/p&gt;
-
-&lt;h1 id=&#34;psuedo-terminal&#34;&gt;psuedo  terminal&lt;/h1&gt;
-
-&lt;p&gt;linux 下终端包括硬件终端，伪终端。psuedo terminal 用途是作为某些程序（GUI,文本编辑）与输入输出设备的数据传输。
-通过ssh,telnet 登陆后会话的控制终端一般为/dev/pts/$1 ,不同的会话一般生成不同的pseudo terminal .&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;readlink   -f &#39;/proc/15063/fd/0&#39;
-
-/dev/pts/1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;不同的应用程序可以输出至相同的伪终端&lt;/p&gt;
-
-&lt;h1 id=&#34;如何恢复呢&#34;&gt;如何恢复呢&lt;/h1&gt;
-
-&lt;p&gt;[ref1]中给出的脚本如下：&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;pre&gt;&lt;code&gt;#!/bin/sh
-function usage() {
-    echo usage: $0 pid
-    exit 1
-}
-TCGETS=0x5401
-TCSETS=0x5402
-SIZEOF_STRUCT_TERMIOS=60
-O_RDWR=2
-((FLAGS=O_RDWR))
-
-PID=$1
-if [ x`which gdb` == x ]; then
-    echo gdb not found in PATH. Please apt-get install gdb
-    exit
-fi
-if [ x$PID == x ]; then
-    usage;
-fi
-if [ x$2 != x ]; then
-    usage;
-fi
-MYPID=$$
-MYFD0=`readlink /proc/$MYPID/fd/0`
-MYFD1=`readlink /proc/$MYPID/fd/1`
-MYFD2=`readlink /proc/$MYPID/fd/2`
-EXE=`readlink /proc/$PID/exe`
-if [ x$EXE == x ]; then
-    echo $0: $PID: no such pid
-    exit 1
-fi
-
-BATCHFILE=`mktemp -p /tmp &amp;quot;gdb.$$_${RANDOM}_XXXXXXXXXX&amp;quot;`
-cat &amp;gt;$BATCHFILE &amp;lt;&amp;lt;EOF
-file $EXE
-attach $PID
-call (char*)malloc($SIZEOF_STRUCT_TERMIOS)
-call (char*)malloc($SIZEOF_STRUCT_TERMIOS)
-call (char*)malloc($SIZEOF_STRUCT_TERMIOS)
-call (void)ioctl(0, $TCGETS, \$1)
-call (void)ioctl(1, $TCGETS, \$2)
-call (void)ioctl(2, $TCGETS, \$3)
-call (void)close(0)
-call (void)close(1)
-call (void)close(2)
-call (int)open(&amp;quot;$MYFD0&amp;quot;, $FLAGS)
-call (int)open(&amp;quot;$MYFD1&amp;quot;, $FLAGS)
-call (int)open(&amp;quot;$MYFD2&amp;quot;, $FLAGS)
-call (void)ioctl(0, $TCSETS, \$1)
-call (void)ioctl(1, $TCSETS, \$2)
-call (void)ioctl(2, $TCSETS, \$3)
-call (void)free(\$1)
-call (void)free(\$2)
-call (void)free(\$3)
-detach
-EOF
-gdb -batch -x $BATCHFILE &amp;gt;/dev/null 2&amp;gt;&amp;amp;1 
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;基本原理是 用GDB 调试目标进程，获取终端属性，关闭与终端关联的fd(0,1,2),
-将stdin,stdout,stderr关联到当前会话的伪终端，恢复终端属性.&lt;/p&gt;
-
-&lt;p&gt;没有按照ref1 中场景去做验证，而是开启2个ssh会话，在1中开vi 进程，在2中执行上述脚本，发现2获取了1中vi进程的控制，而1中则失去控制。&lt;/p&gt;
-
-&lt;h1 id=&#34;gdb&#34;&gt;gdb&lt;/h1&gt;
-
-&lt;p&gt;以上原理听起来比较简单，但是细想下通过gdb 修改运行中程序的状态还是比较神奇的，以前对gdb的认知还以为是只读的。&lt;/p&gt;
-
-&lt;h2 id=&#34;gdb-调试原理&#34;&gt;gdb 调试原理&lt;/h2&gt;
-
-&lt;p&gt;使用gdb 调试进程时，经常需要在特定函数或行处 设置断点，那gdb如何获取指令地址呢？
-[ref2]中给出了初步的解释，gcc 编译时 添加-g 选项会在elf中生成调试段，
-debug section  完成源码文件行号与机器码地址的映射（当然还有其他信息，此处只做基本概括）。
-gdb涉及程序的编译、链接、动态加载,还有待深入学习。&lt;/p&gt;
-
-&lt;h1 id=&#34;ref&#34;&gt;ref&lt;/h1&gt;
-
-&lt;p&gt;[1] &lt;a href=&#34;http://blog.nsfocus.net/processes-remote-shell-lose-control-emergency-rescue-due-tcp-connection-interruption/&#34;&gt;http://blog.nsfocus.net/processes-remote-shell-lose-control-emergency-rescue-due-tcp-connection-interruption/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;[2]&lt;a href=&#34;https://eli.thegreenplace.net/2011/02/07/how-debuggers-work-part-3-debugging-information#id8&#34;&gt;https://eli.thegreenplace.net/2011/02/07/how-debuggers-work-part-3-debugging-information#id8&lt;/a&gt;&lt;/p&gt;
-</description>
+      <description>0 偶尔看到小四的 一篇文章，描述“远程SHELL中进程因TCP连接中断而失去控制的预防及救急方案”[ref1].
+原始问题如下： “在一个SSH会话里执行vi，后因TCP连接中断而失去控制。重新登录后发现原SSH会话对应的伪终端还在，其中的vi进程也在。有什么办法重新获取对vi的控制？ ”
+这个问题还挺有趣 ，从自己的角度复现研究下
+psuedo terminal linux 下终端包括硬件终端，伪终端。psuedo terminal 用途是作为某些程序（GUI,文本编辑）与输入输出设备的数据传输。 通过ssh,telnet 登陆后会话的控制终端一般为/dev/pts/$1 ,不同的会话一般生成不同的pseudo terminal .
+readlink -f &#39;/proc/15063/fd/0&#39; /dev/pts/1  不同的应用程序可以输出至相同的伪终端
+如何恢复呢 [ref1]中给出的脚本如下：
+#!/bin/sh function usage() { echo usage: $0 pid exit 1 } TCGETS=0x5401 TCSETS=0x5402 SIZEOF_STRUCT_TERMIOS=60 O_RDWR=2 ((FLAGS=O_RDWR)) PID=$1 if [ x`which gdb` == x ]; then echo gdb not found in PATH. Please apt-get install gdb exit fi if [ x$PID == x ]; then usage; fi if [ x$2 !</description>
     </item>
     
     <item>
@@ -337,41 +79,14 @@ gdb涉及程序的编译、链接、动态加载,还有待深入学习。&lt;/p&
       <pubDate>Sat, 12 Jan 2019 16:31:47 +0800</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/auth_middle/</guid>
-      <description>
-
-&lt;h2 id=&#34;sessionmiddleware-authenticationmiddleware-完成持久会话&#34;&gt;SessionMiddleware  AuthenticationMiddleware 完成持久会话&lt;/h2&gt;
-
-&lt;p&gt;按照如下流程完成认证与持久会话,其中authenticate、login 是contrib/auth 中的函數&lt;/p&gt;
-
-&lt;h3 id=&#34;1-authenticate&#34;&gt;1.authenticate&lt;/h3&gt;
-
-&lt;p&gt;输入 认证信息
-输出  user 对象&lt;/p&gt;
-
-&lt;h3 id=&#34;2-login&#34;&gt;2.login&lt;/h3&gt;
-
-&lt;p&gt;2.1   将user id 写入 SESSION
-2.2  在执行sessionMiddleWare  process_response 函数时 检测到session 变更  ，执行持久化&lt;/p&gt;
-
-&lt;h3 id=&#34;3-authmiddleware&#34;&gt;3.authmiddleware&lt;/h3&gt;
-
-&lt;p&gt;完成認證后下次WEB請求到達時 , authmiddleware 依賴于sessionMiddleware,
-在settings.py 中配置時出現在後面。&lt;/p&gt;
-
-&lt;h4 id=&#34;3-1-sessionmiddleware&#34;&gt;3.1 sessionMiddleware&lt;/h4&gt;
-
-&lt;p&gt;反序列化出sessionData&lt;/p&gt;
-
-&lt;h4 id=&#34;3-2-authmiddleware&#34;&gt;3.2 authMiddleWare&lt;/h4&gt;
-
-&lt;p&gt;從sessionData取出userid  生成user對象&lt;/p&gt;
-
-&lt;h3 id=&#34;4-登出&#34;&gt;4. 登出&lt;/h3&gt;
-
-&lt;p&gt;clear session data&lt;/p&gt;
-
-&lt;h3 id=&#34;版本django-1-8&#34;&gt;版本django 1.8&lt;/h3&gt;
-</description>
+      <description> SessionMiddleware AuthenticationMiddleware 完成持久会话 按照如下流程完成认证与持久会话,其中authenticate、login 是contrib/auth 中的函數
+1.authenticate 输入 认证信息 输出 user 对象
+2.login 2.1 将user id 写入 SESSION 2.2 在执行sessionMiddleWare process_response 函数时 检测到session 变更 ，执行持久化
+3.authmiddleware 完成認證后下次WEB請求到達時 , authmiddleware 依賴于sessionMiddleware, 在settings.py 中配置時出現在後面。
+3.1 sessionMiddleware 反序列化出sessionData
+3.2 authMiddleWare 從sessionData取出userid 生成user對象
+4. 登出 clear session data
+版本django 1.8 </description>
     </item>
     
     <item>
@@ -380,33 +95,11 @@ gdb涉及程序的编译、链接、动态加载,还有待深入学习。&lt;/p&
       <pubDate>Sat, 12 Jan 2019 16:31:47 +0800</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/py_unicode/</guid>
-      <description>
-
-&lt;h1 id=&#34;unicode-utf8&#34;&gt;Unicode  UTF8&lt;/h1&gt;
-
-&lt;p&gt;Unicode 是字符集
-UTF8 是变长编码规则&lt;/p&gt;
-
-&lt;h2 id=&#34;py2&#34;&gt;py2&lt;/h2&gt;
-
-&lt;p&gt;python2 中，string、UNICODE 是内置类型.
-string 为  按照特定编码规则编码后的字节串，UNICODE 为按照UCS-2或者UCS-4编码的UNICODE 码点(code point)
-STRING 在2种编码规则好间转换需要经过UNICODE 中转&lt;/p&gt;
-
-&lt;h3 id=&#34;输出至shell&#34;&gt;输出至shell&lt;/h3&gt;
-
-&lt;p&gt;在Linux下 可以直接print  unicode,  string
-在输出 unicode对象， 应该会获取sys.stdout 的编码规则属性进行编码然后输出&lt;/p&gt;
-
-&lt;h2 id=&#34;py3&#34;&gt;py3&lt;/h2&gt;
-
-&lt;p&gt;只有string  类型 ，底层存储类似于PYTHON2 中的UNICODE  TYPE ,所以无decode方法,通过encode方法转换编码&lt;/p&gt;
-
-&lt;h1 id=&#34;ref&#34;&gt;ref&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://downloads.egenix.com/python/Unicode-EPC2002-Talk.pdf&#34;&gt;https://downloads.egenix.com/python/Unicode-EPC2002-Talk.pdf&lt;/a&gt;
-&lt;a href=&#34;https://blog.csdn.net/u014591781/article/details/78415044&#34;&gt;https://blog.csdn.net/u014591781/article/details/78415044&lt;/a&gt;&lt;/p&gt;
-</description>
+      <description>Unicode UTF8 Unicode 是字符集 UTF8 是变长编码规则
+py2 python2 中，string、UNICODE 是内置类型. string 为 按照特定编码规则编码后的字节串，UNICODE 为按照UCS-2或者UCS-4编码的UNICODE 码点(code point) STRING 在2种编码规则好间转换需要经过UNICODE 中转
+输出至shell 在Linux下 可以直接print unicode, string 在输出 unicode对象， 应该会获取sys.stdout 的编码规则属性进行编码然后输出
+py3 只有string 类型 ，底层存储类似于PYTHON2 中的UNICODE TYPE ,所以无decode方法,通过encode方法转换编码
+ref https://downloads.egenix.com/python/Unicode-EPC2002-Talk.pdf https://blog.csdn.net/u014591781/article/details/78415044</description>
     </item>
     
     <item>
@@ -415,24 +108,8 @@ STRING 在2种编码规则好间转换需要经过UNICODE 中转&lt;/p&gt;
       <pubDate>Sun, 06 Jan 2019 14:26:53 +0800</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/django_orm_migration/</guid>
-      <description>
-
-&lt;h2 id=&#34;django-orm-migrate-流程&#34;&gt;django orm migrate   流程&lt;/h2&gt;
-
-&lt;h3 id=&#34;执行-python-manage-py-makemigrations-app-name&#34;&gt;执行  python  manage.py  makemigrations  app_name&lt;/h3&gt;
-
-&lt;p&gt;1.依据当前app 的migrations 文件的 依赖关系  构建 修改model.py  前的数据表结构
-2.扫描当前model.py  生成表结构   与 步骤1 中 做  diff 操作  生成migrations 文件&lt;/p&gt;
-
-&lt;h3 id=&#34;执行-python-manage-py-migrate&#34;&gt;执行 python   manage.py migrate&lt;/h3&gt;
-
-&lt;ol&gt;
-&lt;li&gt;检查表 django_migrations 中   各个migrations 文件是否执行   ， 执行未执行的文件&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;##ref
-&lt;a href=&#34;https://reinout.vanrees.org/weblog/2014/11/14/2migrations.html&#34;&gt;https://reinout.vanrees.org/weblog/2014/11/14/2migrations.html&lt;/a&gt;&lt;/p&gt;
-</description>
+      <description>django orm migrate 流程 执行 python manage.py makemigrations app_name 1.依据当前app 的migrations 文件的 依赖关系 构建 修改model.py 前的数据表结构 2.扫描当前model.py 生成表结构 与 步骤1 中 做 diff 操作 生成migrations 文件
+执行 python manage.py migrate  检查表 django_migrations 中 各个migrations 文件是否执行 ， 执行未执行的文件  ##ref https://reinout.vanrees.org/weblog/2014/11/14/2migrations.html</description>
     </item>
     
     <item>
@@ -441,54 +118,10 @@ STRING 在2种编码规则好间转换需要经过UNICODE 中转&lt;/p&gt;
       <pubDate>Sun, 06 Jan 2019 13:40:49 +0800</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/django_wsgi/</guid>
-      <description>
-
-&lt;h1 id=&#34;django-线程安全&#34;&gt;DJANGO 线程安全&lt;/h1&gt;
-
-&lt;p&gt;在项目中 基于  APACHE  DJANGO 搭建WEB 服务. DJANGO  APACHE 间基于WSGI协议通信。mod_wsgi 模块以daemon-mode 运行 ，APACHE 进程与 mod_wsgi 进程 通过UNIX SOCKET  通信。在daemon-mode 下 ，可以配置进程 与线程数目，对于每个进程会启动一个python interpreter ,其会生成1个wsgiHandler&lt;/p&gt;
-
-&lt;p&gt;apache conf 如下：
-    WSGIScriptAlias / &amp;ldquo;YOUR_PATH/wsgi.py&amp;rdquo;
-    WSGIDaemonProcess  10.67.20.1   processes=2 threads=15
-    WSGIProcessGroup  10.67.20.1
-    &lt;Directory &#34;YOUR_WEB_PATH&#34;&gt;
-     Order Deny,Allow
-     Allow from all
-    &lt;/Directory&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;python-gil&#34;&gt;python  GIL&lt;/h2&gt;
-
-&lt;p&gt;cpython，在调度执行多线程代码时 ，每个线程执行前需要获取锁，但是GIL的存在并不能使得python 多线程在操作共享变量时达到线程安全的效果。由于python下的单行语句编译得到字节码后可能是多条指令 ，指令间可能发生线程调度。
-考虑如下代码：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;import threading
-import time
-zero = 0
-def change_zero():  
-
-    global zero
-    for i in range(3000000):  
-
-        zero += 1 #23
-        zero -= 1 #24
-
-th1 = threading.Thread(target = change_zero)
-th2 = threading.Thread(target = change_zero)
-th1.start()
-th2.start()
-th1.join()
-th2.join()
-print(zero)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;由于 #23,24 包含多条字节码    以上程序不能保证最好=后输出  0&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# 环境与测试  
-
-DJANGO  代码 一般包含 view  model 层，由于单个进程  包含多个线程  ，对于view  model  层的脚本中module level 的对象都是共享的，而且这类对象的生命期与进程一致，这样可能在多次HTTP请求间产生副作用。
-通过线程安全的logging 模块记录结果，可以验证。
-&lt;/code&gt;&lt;/pre&gt;
-</description>
+      <description>DJANGO 线程安全 在项目中 基于 APACHE DJANGO 搭建WEB 服务. DJANGO APACHE 间基于WSGI协议通信。mod_wsgi 模块以daemon-mode 运行 ，APACHE 进程与 mod_wsgi 进程 通过UNIX SOCKET 通信。在daemon-mode 下 ，可以配置进程 与线程数目，对于每个进程会启动一个python interpreter ,其会生成1个wsgiHandler
+apache conf 如下： WSGIScriptAlias / &amp;ldquo;YOUR_PATH/wsgi.py&amp;rdquo; WSGIDaemonProcess 10.67.20.1 processes=2 threads=15 WSGIProcessGroup 10.67.20.1 Order Deny,Allow Allow from all 
+python GIL cpython，在调度执行多线程代码时 ，每个线程执行前需要获取锁，但是GIL的存在并不能使得python 多线程在操作共享变量时达到线程安全的效果。由于python下的单行语句编译得到字节码后可能是多条指令 ，指令间可能发生线程调度。 考虑如下代码：
+import threading import time zero = 0 def change_zero(): global zero for i in range(3000000): zero += 1 #23 zero -= 1 #24 th1 = threading.</description>
     </item>
     
     <item>
@@ -497,215 +130,13 @@ DJANGO  代码 一般包含 view  model 层，由于单个进程  包含多个�
       <pubDate>Sun, 06 Jan 2019 13:40:49 +0800</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/logging_safety/</guid>
-      <description>
-
-&lt;h2 id=&#34;线程安全&#34;&gt;线程安全&lt;/h2&gt;
-
-&lt;h3 id=&#34;测试&#34;&gt;测试&lt;/h3&gt;
-
-&lt;p&gt;按照官方doc , 在多线程环境下访问模块shared data object  ,以及handler写入文件系统时都通过加锁保证原子写入&lt;/p&gt;
-
-&lt;p&gt;在进程内多个相同参数调用  logging.getLogger  会返回同1个对象&lt;/p&gt;
-
-&lt;p&gt;可以用 如下 代码测试  ， 注意由于imported modules 是进程级别的, 下面的多线程环境重复IMPORT  不会导致重复IMPORT&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;import  threading
-import  time
-def  worker():
-    import logging as  lg
-    k = lg.getLogger(&#39;a&#39;)
-    print   id(lg),id(k)
-    print  &#39;\n&#39;
-t =  threading.Thread(target = worker)
-t.start()
-t =  threading.Thread(target = worker)
-t.start()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;源码分析&#34;&gt;源码分析&lt;/h3&gt;
-
-&lt;p&gt;为保证线程安全  , 源码中  主要通过  threading.Rlock 保护  2类 对象:&lt;/p&gt;
-
-&lt;p&gt;a.  module level   object&lt;/p&gt;
-
-&lt;p&gt;b. 文件IO&lt;/p&gt;
-
-&lt;h2 id=&#34;多进程写日志&#34;&gt;多进程写日志&lt;/h2&gt;
-
-&lt;p&gt;通过logging  filehandler , 多进程环境下写入相同的日志文件 是安全的吗？&lt;/p&gt;
-
-&lt;p&gt;通过如下代码进行测试，在t_str 超过 8k后  统计&amp;rsquo;test&amp;rsquo; 文件每行长度 发现不一致 ,即写入发送了截断冲突&lt;/p&gt;
-
-&lt;p&gt;查阅 logging 源码  发现  FileHandler 是以&amp;rsquo;a&amp;rsquo; 模式打开文件,按照《The Linux Programming inTerface》：&lt;br /&gt;
-O_APPEND  模式 可以保证 每次写入前SEEK_END ，而且为原子操作 (每次系统调用由kernel保证为原子操作)；存在例外为 PIPE,FIFO 在操作时，有PIPE_BUF 的限制,&lt;/p&gt;
-
-&lt;p&gt;[ref1] 中解释为因为PIPE_BUF 限制而出现此问题,但是测试代码写的是REGULAR  FILE ，应该不是此问题.&lt;br /&gt;
-[ref3] 中给出的MPFileLogHandler ，经过测试是进程安全的,&lt;/p&gt;
-
-&lt;p&gt;是否因为 PYTHON  OPEN 函数 与    OS.OPEN 实现不同呢?   还有待验证&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;	# coding :utf-8
-	from multiprocessing import  Pool
-	import logging
-	import datetime  
-	import os 
-	class MPFileLogHandler(logging.Handler):
-	    def __init__(self, file_path):      
-
-		self._fd = os.open(file_path, os.O_WRONLY | os.O_CREAT | os.O_APPEND)
-		logging.Handler.__init__(self)
-
-	    def emit(self, record):    
-
-		msg = &amp;quot;{}\n&amp;quot;.format(self.format(record))
-		os.write(self._fd, msg.encode(&#39;utf-8&#39;))
-	def process_log(p_off):
-	    #logger_handler = MPFileLogHandler(&#39;test&#39;)
-	    logger_handler = logging.FileHandler(&#39;test&#39;)
-	    logger = logging.getLogger(&#39;test&#39;)
-	    logger.addHandler(logger_handler)
-	    logger.setLevel(logging.DEBUG)
-	    for x in range(0, 200):   
-
-		d = datetime.datetime.now()
-		t_str = &#39;test&#39; *10 # 
-		logger.info(&#39;{}:{}:p_off({}):pid({})&#39;.format(t_str, d.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;), p_off, os.getpid()))
-
-	#process_log(1)
-	if __name__ == &#39;__main__&#39;:
-	    p = Pool(4)
-	    for i in range(32):   
-
-		p.apply_async(process_log, args=(i,))
-	    print  &#39;waiting.....&#39;
-	    p.close()
-	    p.join()
-
-```	 
-
-
-
-##   日志分割
-下面考虑多进程写系统日志   日志分割时的安全性
-对于每条日志  ，处理流程如下：
-handle 函数是handler基类的函数，其他的Handler实现直接或者间接地继承该类
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;def handle(self, record):
-    &amp;quot;&amp;quot;&amp;quot;
-    Conditionally emit the specified logging record.
-
-    Emission depends on filters which may have been added to the handler.
-    Wrap the actual emission of the record with acquisition/release of
-    the I/O thread lock. Returns whether the filter passed the record for
-    emission.
-    &amp;quot;&amp;quot;&amp;quot;
-    rv = self.filter(record)
-    if rv:
-        self.acquire()
-        try:
-            self.emit(record)
-        finally:
-            self.release()
-    return rv
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;
-
-
-###   TimedRotatingFileHandler 
-TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境下 对同1个日志处理时  安全吗？
-简化的代码如下：
-
-```python
-
-	def doRollover(self):
-	    if self.stream:
-		self.stream.close()
-		self.stream = None
-	    # get the time that this sequence started at and make it a TimeTuple
-	    dfn = self.baseFilename + &amp;quot;.&amp;quot; + time.strftime(self.suffix, timeTuple)
-	    if os.path.exists(dfn):
-		os.remove(dfn)
-	    if os.path.exists(self.baseFilename):
-		os.rename(self.baseFilename, dfn)
-	    self.rolloverAt = newRolloverAt
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;显然在多进程都调用  时  存在 其他进程  删除 已经 完成分割进程的日志文件的可能&lt;/p&gt;
-
-&lt;h3 id=&#34;timedrotatingfilehandler-mp&#34;&gt;TimedRotatingFileHandler_MP&lt;/h3&gt;
-
-&lt;p&gt;关键函数如下&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;	    def emit(self, record):
-		&amp;quot;&amp;quot;&amp;quot;
-		Emit a record.
-
-		Output the record to the file, catering for rollover as described
-		in doRollover().
-		
-		For multiprocess, we use file lock. Any better method ?
-		&amp;quot;&amp;quot;&amp;quot;
-		try:
-		    if self.shouldRollover(record):
-			self.doRollover()
-		    FileLock = self._lock_dir + &#39;/&#39; + os.path.basename(self.baseFilename) + &#39;.&#39; + record.levelname
-		    f = open(FileLock, &amp;quot;w+&amp;quot;)
-		    fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-		    FileHandler_MP.emit(self, record)
-		    fcntl.flock(f.fileno(), fcntl.LOCK_UN)
-		    f.close()
-		except (KeyboardInterrupt, SystemExit):
-		    raise
-		except:
-		    self.handleError(record)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;文件分割阶段  依旧存在  TimedRotatingFileHandler 中所述问题&lt;/p&gt;
-
-&lt;h2 id=&#34;concurrentloghandler&#34;&gt;ConcurrentLogHandler&lt;/h2&gt;
-
-&lt;p&gt;ConcurrentLogHandler  重写了基类 Handler  acquire 方法  ,  按照文件大小分割
-通过文件的 排他锁保证单个进程的分割是原子的，下个进程在判断是否需要分割时 ，对已经分割完的文件进行判断
-可见可以安全地分割文件&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;	    def acquire(self):
-		&amp;quot;&amp;quot;&amp;quot; Acquire thread and file locks.  Re-opening log for &#39;degraded&#39; mode.
-		&amp;quot;&amp;quot;&amp;quot;
-		# handle thread lock
-		Handler.acquire(self)
-		# Issue a file lock.  (This is inefficient for multiple active threads
-		# within a single process. But if you&#39;re worried about high-performance,
-		# you probably aren&#39;t using this log handler.)
-		if self.stream_lock:
-		    # If stream_lock=None, then assume close() was called or something
-		    # else weird and ignore all file-level locks.
-		    if self.stream_lock.closed:
-			# Daemonization can close all open file descriptors, see
-			# https://bugzilla.redhat.com/show_bug.cgi?id=952929
-			# Try opening the lock file again.  Should we warn() here?!?
-			try:
-			    self._open_lockfile()
-			except Exception:
-			    self.handleError(NullLogRecord())
-			    # Don&#39;t try to open the stream lock again
-			    self.stream_lock = None
-			    return
-		    lock(self.stream_lock, LOCK_EX)
-		# Stream will be opened as part by FileHandler.emit()
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;refs&#34;&gt;refs&lt;/h2&gt;
-
-&lt;p&gt;[0]&lt;a href=&#34;https://stackoverflow.com/questions/12111127/how-standard-specify-atomic-write-to-regular-filenot-pipe-or-fifo&#34;&gt;https://stackoverflow.com/questions/12111127/how-standard-specify-atomic-write-to-regular-filenot-pipe-or-fifo&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;[1]&lt;a href=&#34;https://manjusaka.itscoder.com/2018/02/23/logging-process-safe/&#34;&gt;https://manjusaka.itscoder.com/2018/02/23/logging-process-safe/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;[3]&lt;a href=&#34;https://www.u3v3.com/ar/1330&#34;&gt;https://www.u3v3.com/ar/1330&lt;/a&gt;&lt;/p&gt;
-</description>
+      <description>线程安全 测试 按照官方doc , 在多线程环境下访问模块shared data object ,以及handler写入文件系统时都通过加锁保证原子写入
+在进程内多个相同参数调用 logging.getLogger 会返回同1个对象
+可以用 如下 代码测试 ， 注意由于imported modules 是进程级别的, 下面的多线程环境重复IMPORT 不会导致重复IMPORT
+import threading import time def worker(): import logging as lg k = lg.getLogger(&#39;a&#39;) print id(lg),id(k) print &#39;\n&#39; t = threading.Thread(target = worker) t.start() t = threading.Thread(target = worker) t.start()  源码分析 为保证线程安全 , 源码中 主要通过 threading.Rlock 保护 2类 对象:
+a. module level object
+b. 文件IO
+多进程写日志 通过logging filehandler , 多进程环境下写入相同的日志文件 是安全的吗？</description>
     </item>
     
     <item>
@@ -714,11 +145,7 @@ TimedRotatingFileHandler  按照时间分割日志文件 ，在多进程环境�
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://joshua0x.github.io/josh.github.io/post/django_thread_safe/</guid>
-      <description>&lt;p&gt;#部署环境
-#测试
-##a
-##b&lt;/p&gt;
-</description>
+      <description>#部署环境 #测试 ##a ##b</description>
     </item>
     
   </channel>

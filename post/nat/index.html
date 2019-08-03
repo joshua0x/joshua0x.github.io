@@ -1,154 +1,56 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en">
   <head>
-  <meta http-equiv="content-type" content="text/html;charset=utf-8">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noodp"/>
-  
-  
-  
-  
-  <link rel="prev" href="https://joshua0x.github.io/josh.github.io/post/ssh_tun/" />
-  
-  <link rel="canonical" href="https://joshua0x.github.io/josh.github.io/post/nat/" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-  <meta name="msapplication-TileColor" content="#da532c">
-  <meta name="theme-color" content="#ffffff">
-  <title>
-       
-       
-           Nat穿透原理 | jsh
-       
-  </title>
-  <meta name="title" content="Nat穿透原理 | jsh">
-    
-  
-  <link rel="stylesheet" href="/josh.github.io/font/iconfont.css">
-  <link rel="stylesheet" href="/josh.github.io/css/main.min.css">
+  <meta charset="utf-8">
+  <meta name="generator" content="Hugo 0.51" />
 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Joway Wang">
+  <meta property="og:url" content="https://joshua0x.github.io/josh.github.io/post/nat/">
 
-  
-  
- 
+  <title>Nat穿透原理 - jsh</title>
+  <meta property="og:title" content="Nat穿透原理 - jsh">
+  <meta property="og:type" content="article">
+  <meta name="description" content="">
 
-<script type="application/ld+json">
- "@context" : "http://schema.org",
-    "@type" : "BlogPosting",
-    "mainEntityOfPage": {
-         "@type": "WebPage",
-         "@id": "https://joshua0x.github.io/josh.github.io/"
-    },
-    "articleSection" : "post",
-    "name" : "Nat穿透原理",
-    "headline" : "Nat穿透原理",
-    "description" : "简单的锥形NAT UDP 打洞验证 NAT TYPE CONE NAT 从同一个内部地址和端口出来的包，NAT关联规则中的外部源IP/PORT 保持不变. 分为3类 ： 1) 全锥形NAT（Full Cone NAT） 在一个新会话建立了公网/内网端口绑定之后，全锥形NAT接下来会接受对应公网端口的所有数据，无论是来自哪个IP。
-2) 受限锥形NAT（Restricted Cone NAT） 只会转发符合某个条件的输入数据包。条件为：外部（源）IP地址匹配内网主机之前发送一个或多个数据包的结点的IP地址。
-3) 端口受限锥形NAT（Port-Restricted Cone NAT） 端口受限锥形NAT也类似，只当外部数据包的IP地址和端口号都匹配内网主机发送过的地址和端口号时才进行转发。 端口受限锥形NAT为内部结点提供了和对称NAT相同等级的保护，以隔离未关联的数据。
-Symmetric Nat 从同一个内部地址和端口出来，是 到另一个外部目标地址和端口，则NAT将使用不同的映射，转换成不同的端口. 同时 NAT设备在收到外部报文时，还需要按照端口受限CONE NAT 相同规则来决定是否转发到内部机器 。
-NAT 类型检测 参考STUN 协议 （RFC3489），完成测试需要2个公网IP 用来检测是否是对称NAT。可以自己搭建，也有一些公开的STUN SERVER，例如stun.ideasip.com。
-demo demo 地址 : https://github.com/joshua0x/nat_traversal
-参考 [0]https://www.ietf.org/rfc/rfc3489.txt [1]https://github.com/pannzh/P2P-Over-MiddleBoxes-Demo [2]https://gist.github.com/koenbollen/464613 [3]https://www.zhihu.com/question/20436734 [4]http://www.h3c.com.cn/MiniSite/Technology_Circle/Net_Reptile/The_Five/Home/Catalog/201206/747037_97665_0.htm",
-    "inLanguage" : "en-us",
-    "author" : "",
-    "creator" : "",
-    "publisher": "",
-    "accountablePerson" : "",
-    "copyrightHolder" : "",
-    "copyrightYear" : "2019",
-    "datePublished": "2019-07-03 10:23:36 &#43;0800 CST",
-    "dateModified" : "2019-07-03 10:23:36 &#43;0800 CST",
-    "url" : "https://joshua0x.github.io/josh.github.io/post/nat/",
-    "wordCount" : "54",
-    "keywords" : [  "jsh"]
-}
-</script>
+  <link href="https://fonts.googleapis.com/css?family=Arvo|Permanent+Marker" rel="stylesheet">
+  <link rel="stylesheet" href="/josh.github.io/css/flexboxgrid.min.css">
+  <link rel="stylesheet" href="/josh.github.io/css/index.css">
 
+  <link rel="stylesheet" href="/josh.github.io/css/github-md.css">
+  <link rel="stylesheet" href="/josh.github.io/css/highlight/tomorrow-night.css">
+  <link href="/josh.github.io/index.xml" rel="alternate" type="application/rss+xml" title="jsh">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-53624533-8"></script><script src="https://joway.io/analytics.js"></script>
 </head>
 
-  
 
-
-  <body class="">
-    <div class="wrapper">
-        <nav class="navbar">
-    <div class="container">
-        <div class="navbar-header header-logo">
-        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://joshua0x.github.io/josh.github.io/">jsh</a>
-        </div>
-        <div class="menu navbar-right">
-                
-                
-                <a class="menu-item" href="/josh.github.io/posts/" title="">Blog</a>
-                
-                <a class="menu-item" href="/josh.github.io/categories/" title="">Categories</a>
-                
-                <a class="menu-item" href="/josh.github.io/tags/" title="">Tags</a>
-                
-                <a class="menu-item" href="/josh.github.io/about/" title="">About</a>
-                
-        </div>
-    </div>
-</nav>
-<nav class="navbar-mobile" id="nav-mobile" style="display: none">
-     <div class="container">
-        <div class="navbar-header">
-            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://joshua0x.github.io/josh.github.io/">jsh</a></div>
-            <div class="menu-toggle">
-                <span></span><span></span><span></span>
+  <body>
+    <article class="post">
+      <div class="row">
+        <div class="col-xs-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+          <a href="https://joshua0x.github.io/josh.github.io/">
+            <div class="head-line"></div>
+          </a>
+          <header class="post-header">
+            <h1 class="post-title">Nat穿透原理</h1>
+            <div class="row">
+              <div class="col-xs-6">
+                <time class="post-date" datetime="2019-07-03 10:23:36 CST">
+                  03 Jul 2019
+                </time>
+              </div>
+              <div class="col-xs-6">
+                <div class="post-author">
+                  <a target="_blank" href="https://joway.io/">@Joway Wang</a>
+                </div>
+              </div>
             </div>
-        </div>
-     
-          <div class="menu" id="mobile-menu">
-                
-                
-                <a class="menu-item" href="/josh.github.io/posts/" title="">Blog</a>
-                
-                <a class="menu-item" href="/josh.github.io/categories/" title="">Categories</a>
-                
-                <a class="menu-item" href="/josh.github.io/tags/" title="">Tags</a>
-                
-                <a class="menu-item" href="/josh.github.io/about/" title="">About</a>
-                
-        </div>
-    </div>
-</nav>
-    	 <main class="main">
-          <div class="container">
-      		
-<article class="post-warp" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Nat穿透原理</h1>
-        <div class="post-meta">
-                Written by <a itemprop="name" href="https://joshua0x.github.io/josh.github.io/" rel="author"></a> with ♥ 
-                <span class="post-time">
-                on <time datetime=2019-07-03 itemprop="datePublished">July 3, 2019</time>
-                </span>
-                in
-                
-        </div>
-    </header>
-    <div class="post-content">
-        
-
-        
-
-        
-        
-     
-          
-          
-          
-
-          
-          
-          
-
-          
+          </header>
+    
+          <div class="post-content markdown-body">
+            
 
 <h1 id="简单的锥形nat-udp-打洞验证">简单的锥形NAT   UDP 打洞验证</h1>
 
@@ -184,77 +86,37 @@ demo demo 地址 : https://github.com/joshua0x/nat_traversal
 [3]<a href="https://www.zhihu.com/question/20436734">https://www.zhihu.com/question/20436734</a>
 [4]<a href="http://www.h3c.com.cn/MiniSite/Technology_Circle/Net_Reptile/The_Five/Home/Catalog/201206/747037_97665_0.htm">http://www.h3c.com.cn/MiniSite/Technology_Circle/Net_Reptile/The_Five/Home/Catalog/201206/747037_97665_0.htm</a></p>
 
-    </div>
-
-    <div class="post-copyright">
-            
-           
-             
-            <p class="copyright-item">
-                    <span>Link:</span>
-                    <a href=https://joshua0x.github.io/josh.github.io/post/nat/>https://joshua0x.github.io/josh.github.io/post/nat/</span>
-            </p>
-            
-            
-    </div>
-
-  
-    <div class="post-tags">
-        
-        <section>
-                <a href="javascript:window.history.back();">back</a></span> · 
-                <span><a href="https://joshua0x.github.io/josh.github.io/">home</a></span>
-        </section>
-    </div>
-
-    <div class="post-nav">
-        
-        <a href="https://joshua0x.github.io/josh.github.io/post/ssh_tun/" class="prev" rel="prev" title="ssh  port forward"><i class="iconfont icon-left"></i>&nbsp;ssh  port forward</a>
-         
-        
-    </div>
-
-    <div class="post-comment">
-          
-                 
-          
-    </div>
-</article>
           </div>
-		   </main>
-      <footer class="footer">
-    <div class="copyright">
-        &copy;
-        
-        <span class="with-love">
-    	 <i class="iconfont icon-love"></i> 
-         </span>
-         
-
-         
-		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
-    </div>
-</footer>
-
-
-
-
-
-
-
-
-
-
-
-
+          
+          <div class="post-comments">
+            <div id="disqus_thread"></div>
+<script>
+  (function() {
     
-    
-    <script src="/josh.github.io/js/vendor_no_gallery.min.js" async=""></script>
-    
-  
+    var d = document,
+      s = d.createElement("script");
+    s.src = "https://joway.disqus.com/embed.js";
+    s.setAttribute("data-timestamp", +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript
+  >Please enable JavaScript to view the
+  <a href="https://disqus.com/?ref_noscript"
+    >comments powered by Disqus.</a
+  ></noscript
+>
 
+          </div>
+          
+        </div>
+      </div>
+    </article>
 
+    <script src="/josh.github.io/js/highlight.pack.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
 
-     </div>
   </body>
 </html>

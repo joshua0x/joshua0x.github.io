@@ -1,155 +1,56 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en">
   <head>
-  <meta http-equiv="content-type" content="text/html;charset=utf-8">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noodp"/>
-  
-  
-  
-  
-  <link rel="prev" href="https://joshua0x.github.io/josh.github.io/post/py_unicode/" />
-  <link rel="next" href="https://joshua0x.github.io/josh.github.io/post/recovery_proc_ctl/" />
-  <link rel="canonical" href="https://joshua0x.github.io/josh.github.io/post/auth_middle/" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-  <meta name="msapplication-TileColor" content="#da532c">
-  <meta name="theme-color" content="#ffffff">
-  <title>
-       
-       
-           django 持久回话 | jsh
-       
-  </title>
-  <meta name="title" content="django 持久回话 | jsh">
-    
-  
-  <link rel="stylesheet" href="/josh.github.io/font/iconfont.css">
-  <link rel="stylesheet" href="/josh.github.io/css/main.min.css">
+  <meta charset="utf-8">
+  <meta name="generator" content="Hugo 0.51" />
 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Joway Wang">
+  <meta property="og:url" content="https://joshua0x.github.io/josh.github.io/post/auth_middle/">
 
-  
-  
- 
+  <title>django 持久回话 - jsh</title>
+  <meta property="og:title" content="django 持久回话 - jsh">
+  <meta property="og:type" content="article">
+  <meta name="description" content="">
 
-<script type="application/ld+json">
- "@context" : "http://schema.org",
-    "@type" : "BlogPosting",
-    "mainEntityOfPage": {
-         "@type": "WebPage",
-         "@id": "https://joshua0x.github.io/josh.github.io/"
-    },
-    "articleSection" : "post",
-    "name" : "django 持久回话",
-    "headline" : "django 持久回话",
-    "description" : " SessionMiddleware AuthenticationMiddleware 完成持久会话 按照如下流程完成认证与持久会话,其中authenticate、login 是contrib/auth 中的函數
-1.authenticate 输入 认证信息 输出 user 对象
-2.login 2.1 将user id 写入 SESSION 2.2 在执行sessionMiddleWare process_response 函数时 检测到session 变更 ，执行持久化
-3.authmiddleware 完成認證后下次WEB請求到達時 , authmiddleware 依賴于sessionMiddleware, 在settings.py 中配置時出現在後面。
-3.1 sessionMiddleware 反序列化出sessionData
-3.2 authMiddleWare 從sessionData取出userid 生成user對象
-4. 登出 clear session data
-版本django 1.8 ",
-    "inLanguage" : "en-us",
-    "author" : "",
-    "creator" : "",
-    "publisher": "",
-    "accountablePerson" : "",
-    "copyrightHolder" : "",
-    "copyrightYear" : "2019",
-    "datePublished": "2019-01-12 16:31:47 &#43;0800 CST",
-    "dateModified" : "2019-01-12 16:31:47 &#43;0800 CST",
-    "url" : "https://joshua0x.github.io/josh.github.io/post/auth_middle/",
-    "wordCount" : "46",
-    "keywords" : [  "jsh"]
-}
-</script>
+  <link href="https://fonts.googleapis.com/css?family=Arvo|Permanent+Marker" rel="stylesheet">
+  <link rel="stylesheet" href="/josh.github.io/css/flexboxgrid.min.css">
+  <link rel="stylesheet" href="/josh.github.io/css/index.css">
 
+  <link rel="stylesheet" href="/josh.github.io/css/github-md.css">
+  <link rel="stylesheet" href="/josh.github.io/css/highlight/tomorrow-night.css">
+  <link href="/josh.github.io/index.xml" rel="alternate" type="application/rss+xml" title="jsh">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-53624533-8"></script><script src="https://joway.io/analytics.js"></script>
 </head>
 
-  
 
-
-  <body class="">
-    <div class="wrapper">
-        <nav class="navbar">
-    <div class="container">
-        <div class="navbar-header header-logo">
-        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://joshua0x.github.io/josh.github.io/">jsh</a>
-        </div>
-        <div class="menu navbar-right">
-                
-                
-                <a class="menu-item" href="/josh.github.io/posts/" title="">Blog</a>
-                
-                <a class="menu-item" href="/josh.github.io/categories/" title="">Categories</a>
-                
-                <a class="menu-item" href="/josh.github.io/tags/" title="">Tags</a>
-                
-                <a class="menu-item" href="/josh.github.io/about/" title="">About</a>
-                
-        </div>
-    </div>
-</nav>
-<nav class="navbar-mobile" id="nav-mobile" style="display: none">
-     <div class="container">
-        <div class="navbar-header">
-            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://joshua0x.github.io/josh.github.io/">jsh</a></div>
-            <div class="menu-toggle">
-                <span></span><span></span><span></span>
+  <body>
+    <article class="post">
+      <div class="row">
+        <div class="col-xs-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+          <a href="https://joshua0x.github.io/josh.github.io/">
+            <div class="head-line"></div>
+          </a>
+          <header class="post-header">
+            <h1 class="post-title">django 持久回话</h1>
+            <div class="row">
+              <div class="col-xs-6">
+                <time class="post-date" datetime="2019-01-12 16:31:47 CST">
+                  12 Jan 2019
+                </time>
+              </div>
+              <div class="col-xs-6">
+                <div class="post-author">
+                  <a target="_blank" href="https://joway.io/">@Joway Wang</a>
+                </div>
+              </div>
             </div>
-        </div>
-     
-          <div class="menu" id="mobile-menu">
-                
-                
-                <a class="menu-item" href="/josh.github.io/posts/" title="">Blog</a>
-                
-                <a class="menu-item" href="/josh.github.io/categories/" title="">Categories</a>
-                
-                <a class="menu-item" href="/josh.github.io/tags/" title="">Tags</a>
-                
-                <a class="menu-item" href="/josh.github.io/about/" title="">About</a>
-                
-        </div>
-    </div>
-</nav>
-    	 <main class="main">
-          <div class="container">
-      		
-<article class="post-warp" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">django 持久回话</h1>
-        <div class="post-meta">
-                Written by <a itemprop="name" href="https://joshua0x.github.io/josh.github.io/" rel="author"></a> with ♥ 
-                <span class="post-time">
-                on <time datetime=2019-01-12 itemprop="datePublished">January 12, 2019</time>
-                </span>
-                in
-                
-        </div>
-    </header>
-    <div class="post-content">
-        
-
-        
-
-        
-        
-     
-          
-          
-          
-
-          
-          
-          
-
-          
+          </header>
+    
+          <div class="post-content markdown-body">
+            
 
 <h2 id="sessionmiddleware-authenticationmiddleware-完成持久会话">SessionMiddleware  AuthenticationMiddleware 完成持久会话</h2>
 
@@ -184,79 +85,37 @@
 
 <h3 id="版本django-1-8">版本django 1.8</h3>
 
-    </div>
-
-    <div class="post-copyright">
-            
-           
-             
-            <p class="copyright-item">
-                    <span>Link:</span>
-                    <a href=https://joshua0x.github.io/josh.github.io/post/auth_middle/>https://joshua0x.github.io/josh.github.io/post/auth_middle/</span>
-            </p>
-            
-            
-    </div>
-
-  
-    <div class="post-tags">
-        
-        <section>
-                <a href="javascript:window.history.back();">back</a></span> · 
-                <span><a href="https://joshua0x.github.io/josh.github.io/">home</a></span>
-        </section>
-    </div>
-
-    <div class="post-nav">
-        
-        <a href="https://joshua0x.github.io/josh.github.io/post/py_unicode/" class="prev" rel="prev" title="py_unicode"><i class="iconfont icon-left"></i>&nbsp;py_unicode</a>
-         
-        
-        <a href="https://joshua0x.github.io/josh.github.io/post/recovery_proc_ctl/" class="next" rel="next" title="恢复丢失进程的控制">恢复丢失进程的控制&nbsp;<i class="iconfont icon-right"></i></a>
-        
-    </div>
-
-    <div class="post-comment">
-          
-                 
-          
-    </div>
-</article>
           </div>
-		   </main>
-      <footer class="footer">
-    <div class="copyright">
-        &copy;
-        
-        <span class="with-love">
-    	 <i class="iconfont icon-love"></i> 
-         </span>
-         
-
-         
-		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
-    </div>
-</footer>
-
-
-
-
-
-
-
-
-
-
-
-
+          
+          <div class="post-comments">
+            <div id="disqus_thread"></div>
+<script>
+  (function() {
     
-    
-    <script src="/josh.github.io/js/vendor_no_gallery.min.js" async=""></script>
-    
-  
+    var d = document,
+      s = d.createElement("script");
+    s.src = "https://joway.disqus.com/embed.js";
+    s.setAttribute("data-timestamp", +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript
+  >Please enable JavaScript to view the
+  <a href="https://disqus.com/?ref_noscript"
+    >comments powered by Disqus.</a
+  ></noscript
+>
 
+          </div>
+          
+        </div>
+      </div>
+    </article>
 
+    <script src="/josh.github.io/js/highlight.pack.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
 
-     </div>
   </body>
 </html>
