@@ -6,7 +6,7 @@
 
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="author" content="Joway Wang">
+  <meta name="author" content="jsh">
   <meta property="og:url" content="https://joshua0x.github.io/josh.github.io/post/django_wsgi/">
 
   <title>Django_wsgi - jsh</title>
@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="/josh.github.io/css/highlight/tomorrow-night.css">
   <link href="/josh.github.io/index.xml" rel="alternate" type="application/rss+xml" title="jsh">
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-53624533-8"></script><script src="https://joway.io/analytics.js"></script>
+  
 </head>
 
 
@@ -43,7 +43,7 @@
               </div>
               <div class="col-xs-6">
                 <div class="post-author">
-                  <a target="_blank" href="https://joway.io/">@Joway Wang</a>
+                  <a target="_blank" href="https://joshua0x.github.io/josh.github.io/">@jsh</a>
                 </div>
               </div>
             </div>
@@ -97,27 +97,6 @@ print(zero)
 DJANGO  代码 一般包含 view  model 层，由于单个进程  包含多个线程  ，对于view  model  层的脚本中module level 的对象都是共享的，而且这类对象的生命期与进程一致，这样可能在多次HTTP请求间产生副作用。
 通过线程安全的logging 模块记录结果，可以验证。
 </code></pre>
-
-          </div>
-          
-          <div class="post-comments">
-            <div id="disqus_thread"></div>
-<script>
-  (function() {
-    
-    var d = document,
-      s = d.createElement("script");
-    s.src = "https://joway.disqus.com/embed.js";
-    s.setAttribute("data-timestamp", +new Date());
-    (d.head || d.body).appendChild(s);
-  })();
-</script>
-<noscript
-  >Please enable JavaScript to view the
-  <a href="https://disqus.com/?ref_noscript"
-    >comments powered by Disqus.</a
-  ></noscript
->
 
           </div>
           
