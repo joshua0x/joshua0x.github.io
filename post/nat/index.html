@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Nat &middot; jsh</title>
+  <title>Nat穿透原理 &middot; jsh</title>
 
   
   <link type="text/css" rel="stylesheet" href="https://joshua0x.github.io/josh.github.io/css/print.css" media="print">
@@ -51,7 +51,7 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Nat</h1>
+  <h1>Nat穿透原理</h1>
   <time datetime=2019-07-03T10:23:36&#43;0800 class="post-date">Wed, Jul 3, 2019</time>
   
 
@@ -63,9 +63,11 @@
 
 <p>从同一个内部地址和端口出来的包，NAT关联规则中的外部源IP/PORT  保持不变.
 分为3类 ：
-1) 全锥形NAT（Full Cone NAT） 在一个新会话建立了公网/内网端口绑定之后，全锥形NAT接下来会接受对应公网端口的所有数据，无论是来自哪个IP。
-2) 受限锥形NAT（Restricted Cone NAT） 只会转发符合某个条件的输入数据包。条件为：外部（源）IP地址匹配内网主机之前发送一个或多个数据包的结点的IP地址。
-3) 端口受限锥形NAT（Port-Restricted Cone NAT） 端口受限锥形NAT也类似，只当外部数据包的IP地址和端口号都匹配内网主机发送过的地址和端口号时才进行转发。 端口受限锥形NAT为内部结点提供了和对称NAT相同等级的保护，以隔离未关联的数据。</p>
+1) 全锥形NAT（Full Cone NAT） 在一个新会话建立了公网/内网端口绑定之后，全锥形NAT接下来会接受对应公网端口的所有数据，无论是来自哪个IP。</p>
+
+<p>2) 受限锥形NAT（Restricted Cone NAT） 只会转发符合某个条件的输入数据包。条件为：外部（源）IP地址匹配内网主机之前发送一个或多个数据包的结点的IP地址。</p>
+
+<p>3) 端口受限锥形NAT（Port-Restricted Cone NAT） 端口受限锥形NAT也类似，只当外部数据包的IP地址和端口号都匹配内网主机发送过的地址和端口号时才进行转发。 端口受限锥形NAT为内部结点提供了和对称NAT相同等级的保护，以隔离未关联的数据。</p>
 
 <h3 id="symmetric-nat">Symmetric Nat</h3>
 
@@ -84,7 +86,8 @@
 <p>[0]<a href="https://www.ietf.org/rfc/rfc3489.txt">https://www.ietf.org/rfc/rfc3489.txt</a>
 [1]<a href="https://github.com/pannzh/P2P-Over-MiddleBoxes-Demo">https://github.com/pannzh/P2P-Over-MiddleBoxes-Demo</a>
 [2]<a href="https://gist.github.com/koenbollen/464613">https://gist.github.com/koenbollen/464613</a>
-[3]<a href="https://www.zhihu.com/question/20436734">https://www.zhihu.com/question/20436734</a></p>
+[3]<a href="https://www.zhihu.com/question/20436734">https://www.zhihu.com/question/20436734</a>
+[4]<a href="http://www.h3c.com.cn/MiniSite/Technology_Circle/Net_Reptile/The_Five/Home/Catalog/201206/747037_97665_0.htm">http://www.h3c.com.cn/MiniSite/Technology_Circle/Net_Reptile/The_Five/Home/Catalog/201206/747037_97665_0.htm</a></p>
 
 </div>
 
