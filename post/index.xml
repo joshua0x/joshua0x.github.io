@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on jsh</title>
-    <link>https://joshua0x.github.io/josh.github.io/post/</link>
+    <link>https://joshua0x.github.io/post/</link>
     <description>Recent content in Posts on jsh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 03 Jul 2019 10:23:36 +0800</lastBuildDate>
     
-	<atom:link href="https://joshua0x.github.io/josh.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://joshua0x.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Nat穿透原理</title>
-      <link>https://joshua0x.github.io/josh.github.io/post/nat/</link>
+      <link>https://joshua0x.github.io/post/nat/</link>
       <pubDate>Wed, 03 Jul 2019 10:23:36 +0800</pubDate>
       
-      <guid>https://joshua0x.github.io/josh.github.io/post/nat/</guid>
+      <guid>https://joshua0x.github.io/post/nat/</guid>
       <description>简单的锥形NAT UDP 打洞验证 NAT TYPE CONE NAT 从同一个内部地址和端口出来的包，NAT关联规则中的外部源IP/PORT 保持不变. 分为3类 ： 1) 全锥形NAT（Full Cone NAT） 在一个新会话建立了公网/内网端口绑定之后，全锥形NAT接下来会接受对应公网端口的所有数据，无论是来自哪个IP。
 2) 受限锥形NAT（Restricted Cone NAT） 只会转发符合某个条件的输入数据包。条件为：外部（源）IP地址匹配内网主机之前发送一个或多个数据包的结点的IP地址。
 3) 端口受限锥形NAT（Port-Restricted Cone NAT） 端口受限锥形NAT也类似，只当外部数据包的IP地址和端口号都匹配内网主机发送过的地址和端口号时才进行转发。 端口受限锥形NAT为内部结点提供了和对称NAT相同等级的保护，以隔离未关联的数据。
@@ -28,10 +28,10 @@ demo demo 地址 : https://github.com/joshua0x/nat_traversal
     
     <item>
       <title>ssh  port forward</title>
-      <link>https://joshua0x.github.io/josh.github.io/post/ssh_tun/</link>
+      <link>https://joshua0x.github.io/post/ssh_tun/</link>
       <pubDate>Tue, 09 Apr 2019 19:56:28 +0800</pubDate>
       
-      <guid>https://joshua0x.github.io/josh.github.io/post/ssh_tun/</guid>
+      <guid>https://joshua0x.github.io/post/ssh_tun/</guid>
       <description>ssh 端口转发 通常将ssh用于远程登陆获得shell，替代telnet，以加密通信流量。ssh的端口转发可以将其他TCP PORT 的流量通过 ssh 通道传输，以保护Telnet，SMTP，LDAP等明文协议。
 原理 本地转发 ssh -L xxxx:y.y.y.y:zzzz ssh_user@ssh_server
 在ssh client 执行以上命令,交互流程如下：
@@ -47,10 +47,10 @@ demo demo 地址 : https://github.com/joshua0x/nat_traversal
     
     <item>
       <title>django   StreamingHttpResponse  分析</title>
-      <link>https://joshua0x.github.io/josh.github.io/post/stream_io_wsgi/</link>
+      <link>https://joshua0x.github.io/post/stream_io_wsgi/</link>
       <pubDate>Wed, 27 Feb 2019 20:03:05 +0800</pubDate>
       
-      <guid>https://joshua0x.github.io/josh.github.io/post/stream_io_wsgi/</guid>
+      <guid>https://joshua0x.github.io/post/stream_io_wsgi/</guid>
       <description>应用场景 在客户端从服务器下载大文件时, 可以逐步从硬盘加载文件内容到内存，并立即传输至对端， StreamingHttpResponse 实现了这种功能
 服务端框架 apache2.4 mod_wsgi django1.8
 源码阅读 类定义如下,在应用中生成器实例初始化得到StreamingHttpResponse实例,返回给mod_wsgi
@@ -60,10 +60,10 @@ demo demo 地址 : https://github.com/joshua0x/nat_traversal
     
     <item>
       <title>恢复丢失进程的控制</title>
-      <link>https://joshua0x.github.io/josh.github.io/post/recovery_proc_ctl/</link>
+      <link>https://joshua0x.github.io/post/recovery_proc_ctl/</link>
       <pubDate>Mon, 25 Feb 2019 21:28:46 +0800</pubDate>
       
-      <guid>https://joshua0x.github.io/josh.github.io/post/recovery_proc_ctl/</guid>
+      <guid>https://joshua0x.github.io/post/recovery_proc_ctl/</guid>
       <description>0 偶尔看到小四的 一篇文章，描述“远程SHELL中进程因TCP连接中断而失去控制的预防及救急方案”[ref1].
 原始问题如下： “在一个SSH会话里执行vi，后因TCP连接中断而失去控制。重新登录后发现原SSH会话对应的伪终端还在，其中的vi进程也在。有什么办法重新获取对vi的控制？ ”
 这个问题还挺有趣 ，从自己的角度复现研究下
@@ -75,10 +75,10 @@ readlink -f &#39;/proc/15063/fd/0&#39; /dev/pts/1  不同的应用程序可以�
     
     <item>
       <title>django 持久回话</title>
-      <link>https://joshua0x.github.io/josh.github.io/post/auth_middle/</link>
+      <link>https://joshua0x.github.io/post/auth_middle/</link>
       <pubDate>Sat, 12 Jan 2019 16:31:47 +0800</pubDate>
       
-      <guid>https://joshua0x.github.io/josh.github.io/post/auth_middle/</guid>
+      <guid>https://joshua0x.github.io/post/auth_middle/</guid>
       <description> SessionMiddleware AuthenticationMiddleware 完成持久会话 按照如下流程完成认证与持久会话,其中authenticate、login 是contrib/auth 中的函數
 1.authenticate 输入 认证信息 输出 user 对象
 2.login 2.1 将user id 写入 SESSION 2.2 在执行sessionMiddleWare process_response 函数时 检测到session 变更 ，执行持久化
@@ -91,10 +91,10 @@ readlink -f &#39;/proc/15063/fd/0&#39; /dev/pts/1  不同的应用程序可以�
     
     <item>
       <title>py_unicode</title>
-      <link>https://joshua0x.github.io/josh.github.io/post/py_unicode/</link>
+      <link>https://joshua0x.github.io/post/py_unicode/</link>
       <pubDate>Sat, 12 Jan 2019 16:31:47 +0800</pubDate>
       
-      <guid>https://joshua0x.github.io/josh.github.io/post/py_unicode/</guid>
+      <guid>https://joshua0x.github.io/post/py_unicode/</guid>
       <description>Unicode UTF8 Unicode 是字符集 UTF8 是变长编码规则
 py2 python2 中，string、UNICODE 是内置类型. string 为 按照特定编码规则编码后的字节串，UNICODE 为按照UCS-2或者UCS-4编码的UNICODE 码点(code point) STRING 在2种编码规则好间转换需要经过UNICODE 中转
 输出至shell 在Linux下 可以直接print unicode, string 在输出 unicode对象， 应该会获取sys.stdout 的编码规则属性进行编码然后输出
@@ -104,20 +104,20 @@ ref https://downloads.egenix.com/python/Unicode-EPC2002-Talk.pdf https://blog.cs
     
     <item>
       <title>Django_orm_migration</title>
-      <link>https://joshua0x.github.io/josh.github.io/post/django_orm_migration/</link>
+      <link>https://joshua0x.github.io/post/django_orm_migration/</link>
       <pubDate>Sun, 06 Jan 2019 14:26:53 +0800</pubDate>
       
-      <guid>https://joshua0x.github.io/josh.github.io/post/django_orm_migration/</guid>
+      <guid>https://joshua0x.github.io/post/django_orm_migration/</guid>
       <description>django orm migrate 流程 执行 python manage.py makemigrations app_name 1.依据当前app 的migrations 文件的 依赖关系 构建 修改model.py 前的数据表结构 2.扫描当前model.py 生成表结构 与 步骤1 中 做 diff 操作 生成migrations 文件
 执行 python manage.py migrate  检查表 django_migrations 中 各个migrations 文件是否执行 ， 执行未执行的文件  ##ref https://reinout.vanrees.org/weblog/2014/11/14/2migrations.html</description>
     </item>
     
     <item>
       <title>Django_wsgi</title>
-      <link>https://joshua0x.github.io/josh.github.io/post/django_wsgi/</link>
+      <link>https://joshua0x.github.io/post/django_wsgi/</link>
       <pubDate>Sun, 06 Jan 2019 13:40:49 +0800</pubDate>
       
-      <guid>https://joshua0x.github.io/josh.github.io/post/django_wsgi/</guid>
+      <guid>https://joshua0x.github.io/post/django_wsgi/</guid>
       <description>DJANGO 线程安全 在项目中 基于 APACHE DJANGO 搭建WEB 服务. DJANGO APACHE 间基于WSGI协议通信。mod_wsgi 模块以daemon-mode 运行 ，APACHE 进程与 mod_wsgi 进程 通过UNIX SOCKET 通信。在daemon-mode 下 ，可以配置进程 与线程数目，对于每个进程会启动一个python interpreter ,其会生成1个wsgiHandler
 apache conf 如下： WSGIScriptAlias / &amp;ldquo;YOUR_PATH/wsgi.py&amp;rdquo; WSGIDaemonProcess 10.67.20.1 processes=2 threads=15 WSGIProcessGroup 10.67.20.1 Order Deny,Allow Allow from all 
 python GIL cpython，在调度执行多线程代码时 ，每个线程执行前需要获取锁，但是GIL的存在并不能使得python 多线程在操作共享变量时达到线程安全的效果。由于python下的单行语句编译得到字节码后可能是多条指令 ，指令间可能发生线程调度。 考虑如下代码：
@@ -126,10 +126,10 @@ import threading import time zero = 0 def change_zero(): global zero for i in ra
     
     <item>
       <title>python logging  安全</title>
-      <link>https://joshua0x.github.io/josh.github.io/post/logging_safety/</link>
+      <link>https://joshua0x.github.io/post/logging_safety/</link>
       <pubDate>Sun, 06 Jan 2019 13:40:49 +0800</pubDate>
       
-      <guid>https://joshua0x.github.io/josh.github.io/post/logging_safety/</guid>
+      <guid>https://joshua0x.github.io/post/logging_safety/</guid>
       <description>线程安全 测试 按照官方doc , 在多线程环境下访问模块shared data object ,以及handler写入文件系统时都通过加锁保证原子写入
 在进程内多个相同参数调用 logging.getLogger 会返回同1个对象
 可以用 如下 代码测试 ， 注意由于imported modules 是进程级别的, 下面的多线程环境重复IMPORT 不会导致重复IMPORT
@@ -141,10 +141,10 @@ b. 文件IO
     
     <item>
       <title></title>
-      <link>https://joshua0x.github.io/josh.github.io/post/django_thread_safe/</link>
+      <link>https://joshua0x.github.io/post/django_thread_safe/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://joshua0x.github.io/josh.github.io/post/django_thread_safe/</guid>
+      <guid>https://joshua0x.github.io/post/django_thread_safe/</guid>
       <description>#部署环境 #测试 ##a ##b</description>
     </item>
     
