@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Hugo 0.51" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="a-coder">
+  <meta property="og:url" content="https://joshua0x.github.io/post/kafka-consumer/">
+
+  <title>Kafka Consumer rebalance 笔记 - a-coder</title>
+  <meta property="og:title" content="Kafka Consumer rebalance 笔记 - a-coder">
+  <meta property="og:type" content="article">
+  <meta name="description" content="">
+
+  <link href="https://fonts.googleapis.com/css?family=Arvo|Permanent+Marker" rel="stylesheet">
+  <link rel="stylesheet" href="/css/flexboxgrid.min.css">
+  <link rel="stylesheet" href="/css/index.css">
+
+  <link rel="stylesheet" href="/css/github-md.css">
+  <link rel="stylesheet" href="/css/highlight/tomorrow-night.css">
+  <link href="/index.xml" rel="alternate" type="application/rss+xml" title="a-coder">
+
+  
+</head>
+
+
+  <body>
+    <article class="post">
+      <div class="row">
+        <div class="col-xs-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+          <a href="https://joshua0x.github.io">
+            <div class="head-line"></div>
+          </a>
+          <header class="post-header">
+            <h1 class="post-title">Kafka Consumer rebalance 笔记</h1>
+            <div class="row">
+              <div class="col-xs-6">
+                <time class="post-date" datetime="2022-10-23 20:50:13 CST">
+                  23 Oct 2022
+                </time>
+              </div>
+              <div class="col-xs-6">
+                <div class="post-author">
+                  <a target="_blank" href="https://joshua0x.github.io">@a-coder</a>
+                </div>
+              </div>
+            </div>
+          </header>
+    
+          <div class="post-content markdown-body">
+            
+
+<p>这里主要分析下 sarama 的一些实现原理。( <a href="https://github.com/Shopify/sarama">https://github.com/Shopify/sarama</a> )</p>
+
+<h2 id="kafka-consumer-rebalance-时序">kafka consumer rebalance 时序</h2>
+
+<p>抄至 <a href="https://chrzaszcz.dev/2019/06/kafka-rebalancing/">https://chrzaszcz.dev/2019/06/kafka-rebalancing/</a></p>
+
+<p><img width="704" alt="图片" src="https://user-images.githubusercontent.com/44366103/103471911-685ec400-4dc1-11eb-84b2-d309c54eb88c.png"></p>
+
+<h2 id="rebalance-触发的机制">rebalance 触发的机制</h2>
+
+<ul>
+<li>#partition 变更， 需要 client 周期刷新metadata 来感知，参考sarama 代码的  loopCheckPartitionNumbers</li>
+<li>consumer 进程心跳超时</li>
+<li>新消费进程加入</li>
+<li>消息拉取超时，超过了 max.poll.interval.ms</li>
+</ul>
+
+<h2 id="sarama-整体流程-时序">sarama 整体流程 时序</h2>
+
+<p><img width="1253" alt="图片" src="https://user-images.githubusercontent.com/44366103/103471333-2a11d680-4dba-11eb-9d38-e40458b895ba.png"></p>
+
+<p><img width="453" alt="图片" src="https://user-images.githubusercontent.com/44366103/105995573-1e2ce200-60e4-11eb-84b6-08e2e78994f6.png"></p>
+
+<h2 id="offset-的初始化">offset 的初始化</h2>
+
+<p>如果是之前老的group 且未过期，在 newConsumerGroup  阶段 从Broker获取初始的 offset
+在partitionConsumer 拉取阶段，单独维护即可
+- om.fetchInitialOffset ，从broker 拉取commited offset</p>
+
+<h2 id="资源释放">资源释放</h2>
+
+<p>ConsumerGroup.Close 如何保证资源释放干净 ?
+需要释放的资源
+- offset commit
+- session / broker/ partionConsumer 等启动的 goroutine 释放</p>
+
+<h3 id="session-对象-exit-时机">session 对象 exit  时机</h3>
+
+<ul>
+<li>发生rebalance , 扩容/消费进程变更</li>
+<li>ConsumerGroup.Close</li>
+</ul>
+
+<h3 id="broker-exit-时机">broker  exit 时机</h3>
+
+<ul>
+<li><p>ConsumerGroup.Close -&gt; client.Close -&gt; broker.Close</p></li>
+
+<li><p><img width="1162" alt="图片" src="https://user-images.githubusercontent.com/44366103/103471369-870d8c80-4dba-11eb-9a83-836852e70f43.png"></p></li>
+</ul>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="https://www.jianshu.com/p/6915e8c983bc">https://www.jianshu.com/p/6915e8c983bc</a>
+<a href="https://chrzaszcz.dev/2019/06/kafka-rebalancing">https://chrzaszcz.dev/2019/06/kafka-rebalancing</a></p>
+
+          </div>
+          
+        </div>
+      </div>
+    </article>
+
+    <script src="/js/highlight.pack.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+  </body>
+</html>

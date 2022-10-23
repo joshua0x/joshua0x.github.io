@@ -6,10 +6,37 @@
     <description>Recent content on a-coder</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 03 Jul 2019 10:23:36 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 23 Oct 2022 21:13:49 +0800</lastBuildDate>
     
 	<atom:link href="https://joshua0x.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Grpc 笔记</title>
+      <link>https://joshua0x.github.io/post/grpc/</link>
+      <pubDate>Sun, 23 Oct 2022 21:13:49 +0800</pubDate>
+      
+      <guid>https://joshua0x.github.io/post/grpc/</guid>
+      <description>这里主要记录grpc，包括序列化协议 / client 端代码实现等。
+序列化方式 grpc 一般在tcp 之上传输数据，tcp 是流式协议，需要定义协议来 规定接收端如何切流（从tcp data flow 拿到一个完整的包）。
+一般是通过tlv 的格式来处理，类似下面的格式。
+|-----type(2bytes)------|--------length(4bytes)--------|-------value(payload)------|  抓包看下 grpc 数据序列化的格式 ，可以看到除了header 外，实际的请求/响应payload 部分 是通过data 类型的frame 来发送数据的，其中 data frame 的核心 payload 部分又是通过 protobuf 序列化请求 or 响应body ，protobuf 在这里只是一种序列化算法，换成 msgpack /json 也是可以的，当然这里更多是性能考量选择protobuf 。
+frame 的序列化格式如下，
++-----------------------------------------------+ | Length (24) | +---------------+---------------+---------------+ | Type (8) | Flags (8) | +-+-------------+---------------+-------------------------------+ |R| Stream Identifier (31) | +=+=============================================================+ | Frame Payload (0...) ... +---------------------------------------------------------------+  发送req 回包rsp 更细致的wire protocol 可以参考 wiki</description>
+    </item>
+    
+    <item>
+      <title>Kafka Consumer rebalance 笔记</title>
+      <link>https://joshua0x.github.io/post/kafka-consumer/</link>
+      <pubDate>Sun, 23 Oct 2022 20:50:13 +0800</pubDate>
+      
+      <guid>https://joshua0x.github.io/post/kafka-consumer/</guid>
+      <description>这里主要分析下 sarama 的一些实现原理。( https://github.com/Shopify/sarama )
+kafka consumer rebalance 时序 抄至 https://chrzaszcz.dev/2019/06/kafka-rebalancing/
+rebalance 触发的机制  #partition 变更， 需要 client 周期刷新metadata 来感知，参考sarama 代码的 loopCheckPartitionNumbers consumer 进程心跳超时 新消费进程加入 消息拉取超时，超过了 max.poll.interval.ms  sarama 整体流程 时序 offset 的初始化 如果是之前老的group 且未过期，在 newConsumerGroup 阶段 从Broker获取初始的 offset 在partitionConsumer 拉取阶段，单独维护即可 - om.fetchInitialOffset ，从broker 拉取commited offset
+资源释放 ConsumerGroup.Close 如何保证资源释放干净 ? 需要释放的资源 - offset commit - session / broker/ partionConsumer 等启动的 goroutine 释放
+session 对象 exit 时机  发生rebalance , 扩容/消费进程变更 ConsumerGroup.</description>
+    </item>
     
     <item>
       <title>Nat穿透原理</title>

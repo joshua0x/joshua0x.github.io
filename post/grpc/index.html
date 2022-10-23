@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Hugo 0.51" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="a-coder">
+  <meta property="og:url" content="https://joshua0x.github.io/post/grpc/">
+
+  <title>Grpc 笔记 - a-coder</title>
+  <meta property="og:title" content="Grpc 笔记 - a-coder">
+  <meta property="og:type" content="article">
+  <meta name="description" content="">
+
+  <link href="https://fonts.googleapis.com/css?family=Arvo|Permanent+Marker" rel="stylesheet">
+  <link rel="stylesheet" href="/css/flexboxgrid.min.css">
+  <link rel="stylesheet" href="/css/index.css">
+
+  <link rel="stylesheet" href="/css/github-md.css">
+  <link rel="stylesheet" href="/css/highlight/tomorrow-night.css">
+  <link href="/index.xml" rel="alternate" type="application/rss+xml" title="a-coder">
+
+  
+</head>
+
+
+  <body>
+    <article class="post">
+      <div class="row">
+        <div class="col-xs-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+          <a href="https://joshua0x.github.io">
+            <div class="head-line"></div>
+          </a>
+          <header class="post-header">
+            <h1 class="post-title">Grpc 笔记</h1>
+            <div class="row">
+              <div class="col-xs-6">
+                <time class="post-date" datetime="2022-10-23 21:13:49 CST">
+                  23 Oct 2022
+                </time>
+              </div>
+              <div class="col-xs-6">
+                <div class="post-author">
+                  <a target="_blank" href="https://joshua0x.github.io">@a-coder</a>
+                </div>
+              </div>
+            </div>
+          </header>
+    
+          <div class="post-content markdown-body">
+            
+
+<p>这里主要记录grpc，包括序列化协议 / client 端代码实现等。</p>
+
+<h2 id="序列化方式">序列化方式</h2>
+
+<p>grpc 一般在tcp 之上传输数据，tcp 是流式协议，需要定义协议来 规定接收端如何切流（从tcp data flow 拿到一个完整的包）。</p>
+
+<p>一般是通过tlv 的格式来处理，类似下面的格式。</p>
+
+<pre><code>|-----type(2bytes)------|--------length(4bytes)--------|-------value(payload)------|
+</code></pre>
+
+<p>抓包看下 grpc 数据序列化的格式 ，可以看到除了header 外，实际的请求/响应payload 部分 是通过data 类型的frame  来发送数据的，其中 data frame 的核心 payload 部分又是通过 protobuf 序列化请求 or 响应body  ，protobuf 在这里只是一种序列化算法，换成 msgpack /json 也是可以的，当然这里更多是性能考量选择protobuf 。</p>
+
+<p>frame 的序列化格式如下，</p>
+
+<pre><code>+-----------------------------------------------+
+|                 Length (24)                   |
++---------------+---------------+---------------+
+|   Type (8)    |   Flags (8)   |
++-+-------------+---------------+-------------------------------+
+|R|                 Stream Identifier (31)                      |
++=+=============================================================+
+|                   Frame Payload (0...)                      ...
++---------------------------------------------------------------+
+</code></pre>
+
+<h3 id="发送req">发送req</h3>
+
+<p><img width="747" alt="image" src="https://user-images.githubusercontent.com/44366103/197394365-06a6216d-5348-4141-a367-cc7d82f4b891.png"></p>
+
+<p><img width="751" alt="image" src="https://user-images.githubusercontent.com/44366103/197394379-687fc5be-b168-4572-8d92-e307d5608c63.png"></p>
+
+<h3 id="回包rsp">回包rsp</h3>
+
+<p><img width="665" alt="image" src="https://user-images.githubusercontent.com/44366103/197394392-a8382999-e206-46cd-b0b9-5b9d9f5036bf.png">
+<br></p>
+
+<p>更细致的wire protocol 可以参考 <a href="https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md">wiki</a></p>
+
+<h2 id="client-端">client 端</h2>
+
+<p>client 端的核心是 服务发现 和 负载均衡。 其中resolver 抽象了 名字解析的接口，可以很方便的实现不同的服务发现，例如基于etcd/zk 等。</p>
+
+<p>balancer 抽象了 客户端负载均衡的接口。</p>
+
+<p>从对象关系维度看， grpc.ccResolverWrapper 实现了 resolver.ClientConn 接口， grpc.ccBalancerWrapper实现了 balancer.ClientConn 接口。</p>
+
+<h3 id="resolver-pkg">resolver pkg</h3>
+
+<p><img width="1146" alt="图片" src="https://user-images.githubusercontent.com/44366103/132989206-05fc0863-2649-45f9-be30-c5d68c6bbe77.png"></p>
+
+<h3 id="balancer-pkg">balancer pkg</h3>
+
+<p><img src="https://user-images.githubusercontent.com/44366103/138584668-105c4a4f-74cc-4b30-bb07-1d6e3ccccd7e.png" alt="image" /></p>
+
+<h3 id="grpc-pkg">grpc  pkg</h3>
+
+<p><img src="https://user-images.githubusercontent.com/44366103/138584680-f4671c5c-d268-4df4-92ae-af7e29251898.png" alt="image" /></p>
+
+<h3 id="服务发现-后端实例上下线时的数据流向">服务发现：后端实例上下线时的数据流向</h3>
+
+<p>以 基于ectd  实现的服务发现为例，看看 后端实例上下线 的行为，在client端是如何处理的。从读（rpc invoke 获取某个实例）和 写 (实例上下线，) 2个方面看。以etcd resolver 和 roundrobin balancer 为例来分析。</p>
+
+<h4 id="读">读</h4>
+
+<p><img src="https://user-images.githubusercontent.com/44366103/138600018-d5023723-f098-4625-b712-7081395345b9.png" alt="image" /></p>
+
+<h4 id="写">写</h4>
+
+<p><img src="https://user-images.githubusercontent.com/44366103/138600005-05185de1-2c36-4953-9373-a25a788f41f3.png" alt="image" /></p>
+
+<h4 id="subconn-addrconn-对象状态维护">subConn / addrConn  对象状态维护</h4>
+
+<p><img src="https://user-images.githubusercontent.com/44366103/138710872-2cce4e65-68eb-49be-bdd5-0456187f2690.png" alt="image" /></p>
+
+<h2 id="refs">refs</h2>
+
+<p><a href="https://pingcap.com/zh/blog/grpc">https://pingcap.com/zh/blog/grpc</a></p>
+
+          </div>
+          
+        </div>
+      </div>
+    </article>
+
+    <script src="/js/highlight.pack.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+  </body>
+</html>
