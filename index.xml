@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>jsh</title>
+    <title>a-coder</title>
     <link>https://joshua0x.github.io/</link>
-    <description>Recent content on jsh</description>
+    <description>Recent content on a-coder</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 03 Jul 2019 10:23:36 +0800</lastBuildDate>
@@ -137,15 +137,6 @@ import threading import time def worker(): import logging as lg k = lg.getLogger
 a. module level object
 b. 文件IO
 多进程写日志 通过logging filehandler , 多进程环境下写入相同的日志文件 是安全的吗？</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://joshua0x.github.io/post/django_thread_safe/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://joshua0x.github.io/post/django_thread_safe/</guid>
-      <description>#部署环境 #测试 ##a ##b</description>
     </item>
     
   </channel>
