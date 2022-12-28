@@ -95,9 +95,9 @@ func main() {
 <h2 id="golangci-lint-插件开发">golangci-lint 插件开发</h2>
 
 <p>golangci-lint 是golang 中广泛使用的静态扫描工具，包括了基础的ast 解析 功能，实现简单的插件只需要遍历 ast 树，按检查特征识别即可。
-流程如下：
-- 遍历语法树，找到 函数调用，确定返回类型。
-  - 1.函数签名返回类型 为具体类型（不是interface）,接收对象的类型为 interface ，
+流程如下<br>：
+- 遍历语法树，找到 函数调用，确定返回类型。<br>
+  - 1.函数签名返回类型 为具体类型（不是interface）,接收对象的类型为 interface <br>
   - 2.查询代码存在 接收对象 == nil 的判断 。则识别为 有问题的case 。</p>
 
 <h3 id="识别的结果">识别的结果</h3>
