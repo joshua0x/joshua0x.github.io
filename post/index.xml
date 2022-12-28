@@ -6,10 +6,21 @@
     <description>Recent content in Posts on a-coder</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 23 Oct 2022 21:13:49 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 20 Dec 2022 11:25:15 +0800</lastBuildDate>
     
 	<atom:link href="https://joshua0x.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>golang 静态扫描插件的实现</title>
+      <link>https://joshua0x.github.io/post/static-check/</link>
+      <pubDate>Tue, 20 Dec 2022 11:25:15 +0800</pubDate>
+      
+      <guid>https://joshua0x.github.io/post/static-check/</guid>
+      <description>静态分析，区别于运行时 ，用于提前发现代码漏洞。以下通过1个在业务代码中 容易出现的问题，尝试通过写静态分析插件 来检测这类错误。
+iface nil 检查的问题 以下代码中，定义了 LocalErr 对象 实现error 接口。err1 的类型是 error 接口，call 函数返回类型是 *LocalError ，由于err1 对象的 类型信息为*LocalError 不为Nil , 则 err1 != nil 成立。这种会导致问题。
+package main import ( &amp;quot;fmt&amp;quot; ) //errors checked,call-func errors type LocalErr struct { } func (l *LocalErr) Error() string { panic(&amp;quot;implement me&amp;quot;) } func call() *LocalErr { return nil } func main() { var err1 error err1 = call() // err2 := call() // never is nil ?</description>
+    </item>
     
     <item>
       <title>Grpc 笔记</title>

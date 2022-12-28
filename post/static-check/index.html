@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Hugo 0.51" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="a-coder">
+  <meta property="og:url" content="https://joshua0x.github.io/post/static-check/">
+
+  <title>golang 静态扫描插件的实现 - a-coder</title>
+  <meta property="og:title" content="golang 静态扫描插件的实现 - a-coder">
+  <meta property="og:type" content="article">
+  <meta name="description" content="">
+
+  <link href="https://fonts.googleapis.com/css?family=Arvo|Permanent+Marker" rel="stylesheet">
+  <link rel="stylesheet" href="/css/flexboxgrid.min.css">
+  <link rel="stylesheet" href="/css/index.css">
+
+  <link rel="stylesheet" href="/css/github-md.css">
+  <link rel="stylesheet" href="/css/highlight/tomorrow-night.css">
+  <link href="/index.xml" rel="alternate" type="application/rss+xml" title="a-coder">
+
+  
+</head>
+
+
+  <body>
+    <article class="post">
+      <div class="row">
+        <div class="col-xs-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+          <a href="https://joshua0x.github.io">
+            <div class="head-line"></div>
+          </a>
+          <header class="post-header">
+            <h1 class="post-title">golang 静态扫描插件的实现</h1>
+            <div class="row">
+              <div class="col-xs-6">
+                <time class="post-date" datetime="2022-12-20 11:25:15 CST">
+                  20 Dec 2022
+                </time>
+              </div>
+              <div class="col-xs-6">
+                <div class="post-author">
+                  <a target="_blank" href="https://joshua0x.github.io">@a-coder</a>
+                </div>
+              </div>
+            </div>
+          </header>
+    
+          <div class="post-content markdown-body">
+            
+
+<p>静态分析，区别于运行时 ，用于提前发现代码漏洞。以下通过1个在业务代码中 容易出现的问题，尝试通过写静态分析插件 来检测这类错误。</p>
+
+<h2 id="iface-nil-检查的问题">iface nil 检查的问题</h2>
+
+<p>以下代码中，定义了 LocalErr 对象 实现error 接口。err1 的类型是 error 接口，call 函数返回类型是 *LocalError ，由于err1 对象的 类型信息为*LocalError 不为Nil ,
+则 err1 != nil 成立。这种会导致问题。</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+//errors checked,call-func errors
+
+type LocalErr struct {
+}
+
+func (l *LocalErr) Error() string {
+	panic(&quot;implement me&quot;)
+}
+
+func call() *LocalErr {
+	return nil
+}
+
+func main() {
+	var err1 error
+
+	err1 = call()
+
+	//
+	err2 := call()
+
+	// never is nil ??,types concreate-types-checked,
+	fmt.Println(err == nil, err2 == nil)
+}
+
+</code></pre>
+
+<h2 id="golangci-lint-插件开发">golangci-lint 插件开发</h2>
+
+<p>golangci-lint 是golang 中广泛使用的静态扫描工具，包括了基础的ast 解析 功能，实现简单的插件只需要遍历 ast 树，按检查特征识别即可。
+流程如下：
+- 遍历语法树，找到 函数调用，确定返回类型。
+  - 1.函数签名返回类型 为具体类型（不是interface）,接收对象的类型为 interface ，
+  - 2.查询代码存在 接收对象 == nil 的判断 。则识别为 有问题的case 。</p>
+
+<h3 id="识别的结果">识别的结果</h3>
+
+<pre><code>test_samples/sample.go:32:2: concrete type convert to interface ,the result is not NIL .cant reach code branchs
+
+</code></pre>
+
+<p>核心代码如下 ，</p>
+
+<pre><code class="language-go">
+
+package main
+
+import (
+	&quot;fmt&quot;
+	_ &quot;github.com/davecgh/go-spew/spew&quot;
+	&quot;go/ast&quot;
+	&quot;go/token&quot;
+	&quot;go/types&quot;
+	&quot;golang.org/x/tools/go/analysis&quot;
+)
+
+/* 测试验证了
+1。跨包定义的 类型可以取到，
+2。变量可以按照作用域取到正确的 定义对象，覆盖 。scopes
+3。处理方式
+
+*/
+const Doc = `检查 concreate type 隐式转换为 iface 的调用`
+
+var Analyzer = &amp;analysis.Analyzer{
+	Name:             &quot;implicitconverts&quot;,
+	Doc:              Doc,
+	Run:              run,
+	RunDespiteErrors: true,
+	//FactTypes:        []analysis.Fact{new(foundFact)},
+}
+
+/*
+
+	case *ast.ExprStmt: // check for errgroup.Group.Go and testing.T.Run (with T.Parallel)
+		if call, ok := s.X.(*ast.CallExpr); ok {
+			if i == lastStmt {
+				stmts = litStmts(goInvoke(pass.TypesInfo, call))
+			}
+			if stmts == nil &amp;&amp; analysisinternal.LoopclosureParallelSubtests {
+				stmts = parallelSubtest(pass.TypesInfo, call)
+			}
+		}
+	}
+*/
+func run(pass *analysis.Pass) (interface{}, error) {
+	for _, f := range pass.Files {
+		ast.Inspect(f, func(n ast.Node) bool {
+			if block, ok := n.(*ast.BlockStmt); ok {
+
+				for k, item := range block.List {
+					switch item.(type) {
+					case *ast.AssignStmt:
+						assign := item.(*ast.AssignStmt)
+						if assign.Tok == token.DEFINE {
+							continue
+						}
+						var callf *ast.CallExpr
+						var iscall bool
+						if callf, iscall = assign.Rhs[0].(*ast.CallExpr); !iscall {
+							continue
+						}
+						//is -called, check-call,
+						var funcIdent *ast.Ident
+						var funcSig *types.Signature
+						var ok bool
+						funcIdent, ok = callf.Fun.(*ast.Ident)
+						if !ok {
+							sel, _ := callf.Fun.(*ast.SelectorExpr)
+							funcIdent = sel.Sel
+						}
+
+						//selector-called-checks ??,todo,*ast.SelectorExpr,
+
+						temp_funcdef, valid := pass.TypesInfo.ObjectOf(funcIdent).(*types.Func)
+						if !valid {
+							continue
+						}
+						funcSig = temp_funcdef.Type().(*types.Signature)
+						//is-concrete-type-returned ??
+						//funcdef.Results.List
+						fmt.Println(&quot;check &quot;, pass.Fset.Position(funcIdent.NamePos))
+						for i, receiver := range assign.Lhs {
+							//函数签名，返回的是 interface{} ,
+							if types.IsInterface(funcSig.Results().At(i).Type()) {
+								continue
+							}
+							//接收 值对象，需要是 interface{} ,则存在转换
+							if iden, ok := receiver.(*ast.Ident); ok {
+								var receiverObj types.Object
+								receiverObj = pass.TypesInfo.ObjectOf(iden)
+								if !types.IsInterface(receiverObj.Type()) {
+									continue
+								}
+								//遍历后续的代码，存在  判断 == nil ,则为unreachble codes ,
+								checkNil(k, block, receiverObj, pass)
+							}
+
+						}
+
+					}
+				}
+			}
+
+			return true
+		})
+	}
+	return nil, nil
+}
+
+func checkNil(k int, block *ast.BlockStmt, receiverObj types.Object, pass *analysis.Pass) {
+	for p := k + 1; p &lt; len(block.List); p++ {
+		//?, == ,if-stmts - ,
+		var ifstmt *ast.IfStmt
+		var valid bool
+		if ifstmt, valid = block.List[p].(*ast.IfStmt); !valid {
+			continue
+		}
+		//
+		if c, valid := ifstmt.Cond.(*ast.BinaryExpr); valid {
+			if c.Op != token.EQL {
+				continue
+			}
+			//pass.TypesInfo.ObjectOf(id);
+			cdd := pass.TypesInfo.ObjectOf(c.Y.(*ast.Ident))
+			switch cdd.(type) {
+			case *types.Nil:
+				//
+				got := pass.TypesInfo.ObjectOf(c.X.(*ast.Ident))
+				if got == receiverObj {
+					//fmt.Println(&quot;find exceptions &quot;, pass.Fset.Position(ifstmt.Pos()))
+					pass.Report(analysis.Diagnostic{
+						Pos:     ifstmt.Pos(),
+						Message: fmt.Sprintf(&quot;concrete type convert to interface ,the result is not NIL .cant reach code branchs&quot;),
+					})
+				}
+			}
+
+		}
+
+	}
+
+}
+
+
+
+</code></pre>
+
+<pre><code class="language-go">package main
+
+import (
+	_ &quot;golang.org/x/tools/go/analysis/passes/loopclosure&quot;
+	&quot;golang.org/x/tools/go/analysis/singlechecker&quot;
+)
+
+func main() {
+	singlechecker.Main(Analyzer)
+}
+
+</code></pre>
+
+          </div>
+          
+        </div>
+      </div>
+    </article>
+
+    <script src="/js/highlight.pack.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+  </body>
+</html>

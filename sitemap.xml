@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://joshua0x.github.io/post/static-check/</loc>
+    <lastmod>2022-12-20T11:25:15+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://joshua0x.github.io/post/grpc/</loc>
     <lastmod>2022-10-23T21:13:49+08:00</lastmod>
   </url>
@@ -59,7 +64,7 @@
   
   <url>
     <loc>https://joshua0x.github.io/post/</loc>
-    <lastmod>2022-10-23T21:13:49+08:00</lastmod>
+    <lastmod>2022-12-20T11:25:15+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -70,7 +75,7 @@
   
   <url>
     <loc>https://joshua0x.github.io/</loc>
-    <lastmod>2022-10-23T21:13:49+08:00</lastmod>
+    <lastmod>2022-12-20T11:25:15+08:00</lastmod>
     <priority>0</priority>
   </url>
   
